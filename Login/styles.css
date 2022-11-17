@@ -60,8 +60,6 @@ body{
   color: #fff;
 }
 
-.welcome-msg{
-}
 
 .welcome-msg1{
   margin: 0;
@@ -75,10 +73,34 @@ body{
   font-weight: 400;
 }
 
-.info{
+.inputbox{
   width: 356px;
+  height: 38px;
   padding: 10px;
   margin: 10px 0px;
+  background-color: #fff;
+  display: flex;
+  align-items: center;
+  padding: 0;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.inputbox > input{
+  width: 310px;
+  border: 0;
+}
+
+.imgcont{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 45px;
+  height: 38px;
+}
+
+.imgcont > img{
+  width: 18px;
 }
 
 .underlogin{
