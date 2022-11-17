@@ -1,47 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,900;1,500;1,900&family=Open+Sans:wght@300;400;700&display=swap"
+      rel="stylesheet"
+    />
     <title>MOVIEfinder</title>
-    <link rel="stylesheet" href="styles.css">
-</head>
-<body>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
     <nav>
-        <p>MOVIEfinder</p>
-        <input type="search" placeholder="Search">
-        <div class="user-info">
-            <p>Log Out</p><img src="./src/placeholder-pfp.jpg">
-        </div>
+      <p class="movfin">MOVIE<span>finder</span></p>
+      <div class="searchbar">
+        <img src="./src/lookingglass.svg" alt="looking glass" />
+        <input type="search" placeholder="Search movies..." />
+      </div>
+      <div class="user-info">
+        <p>Log Out</p>
+        <img src="./src/Ellipse 2.svg" />
+      </div>
     </nav>
     <div class="preview">
-        <p>genre</p>
-        <p>stars</p>
-        <h2>Title</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio aliquam accusamus consectetur aut repellat saepe ratione aspernatur perferendis repudiandae vitae, exercitationem iusto eaque omnis recusandae eius. Sapiente ipsum ullam sed?</p>
-        <button>Watch Now</button>
+      <p class="genre">genre</p>
+      <p>stars</p>
+      <h2 class="movietitle">Title</h2>
+      <div class="descriptioncont">
+            <p class="description">
+              Lorem ipsum dolor sit amet consectetur adipisicing elit. Optio aliquam
+              accusamus consectetur aut repellat saepe ratione aspernatur perferendis
+              repudiandae vitae, exercitationem iusto eaque omnis recusandae eius.
+              Sapiente ipsum ullam sed?
+            </p>
+    </div>
+      <div class="watchnow">
+          <button>Watch Now</button>
+      </div>
     </div>
     <div>
-        <p>Most Watched Movies</p>
-        <div class="cards">
-            <div class="card">
-                <h2>Title</h2>
-                <p>stars</p>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eum quo architecto, atque corporis fugiat cupiditate repellat mollitia nesciunt sunt maxime ratione quia cumque nisi nobis nam. </p>
-            </div>
-            <div class="card">
-                <h2>Title</h2>
-                <p>stars</p>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eum quo architecto, atque corporis fugiat cupiditate repellat mollitia nesciunt sunt maxime ratione quia cumque nisi nobis nam. </p>
-            </div>
-            <div class="card">
-                <h2>Title</h2>
-                <p>stars</p>
-                <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eum quo architecto, atque corporis fugiat cupiditate repellat mollitia nesciunt sunt maxime ratione quia cumque nisi nobis nam. </p>
-            </div>
-    
+      <p>Most Watched Movies</p>
+      <div class="cards">
+        <div class="card">
+          <h2>Title</h2>
+          <p>stars</p>
+          <p>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eum quo
+            architecto, atque corporis fugiat cupiditate repellat mollitia
+            nesciunt sunt maxime ratione quia cumque nisi nobis nam.
+          </p>
         </div>
+        <div class="card">
+          <h2>Title</h2>
+          <p>stars</p>
+          <p>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eum quo
+            architecto, atque corporis fugiat cupiditate repellat mollitia
+            nesciunt sunt maxime ratione quia cumque nisi nobis nam.
+          </p>
+        </div>
+        <div class="card">
+          <h2>Title</h2>
+          <p>stars</p>
+          <p>
+            Lorem ipsum dolor, sit amet consectetur adipisicing elit. Eum quo
+            architecto, atque corporis fugiat cupiditate repellat mollitia
+            nesciunt sunt maxime ratione quia cumque nisi nobis nam.
+          </p>
+        </div>
+      </div>
     </div>
-</body>
+  </body>
 </html>

@@ -1,20 +1,55 @@
+body{
+    margin: 0;
+}
+
 nav{
     display: flex;
     flex-direction: row;
-    justify-content: space-between;
+    justify-content: space-around;
     background: #2791C2;
     align-items: center;
+    color: white;
 }
 
 nav > input{
     height: fit-content;
     border-radius: 5px;
+}
+
+.movfin{
+    font-family: 'Montserrat', sans-serif;
+    font-style: normal;
+    font-weight: 900;
+    font-size: 24px;
+    line-height: 32px;
 
 }
-.preview{
-    background: grey;
-    height: 40vh;
-    padding: 49px;
+
+.movfin > span{
+    font-style: italic;
+    font-weight: 500;
+}
+
+
+.searchbar{
+    display: flex;
+    background-color: white;
+    width: 384px;
+    height: 42px;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.searchbar > input{
+    border: 0;
+    height: 25px;
+    width: 330px;
+}
+
+.searchbar > img{
+    height: 24px;
+    width: 24px;
+    padding: 7px 12px;
 }
 
 .user-info{
@@ -23,18 +58,79 @@ nav > input{
     width: 100px;
     align-items: center;
     padding: 0px 10px;
+    font-family: 'Open Sans', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 16px;
 }
 
-.user-info > img{
-    height: 30px;
-    width: 30px;
-    border-radius: 50%;
+.preview{
+    background: grey;
+    height: 549.59px;
+    padding: 49px;
+    background-image: url("./src/Avatar 1.png");
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
 
+.genre{
+    font-family: 'Open Sans', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 16px;   
+    color: #0FEFFD;
+}
+
+.movietitle{
+    font-family: 'Open Sans', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 56px;
+    line-height: 64px;
+    color: #FFFFFF;
+}
+
+.descriptioncont{
+    width: 605px;
+    height: 127px;
+    font-family: 'Open Sans', sans-serif;
+    font-style: normal;
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 32px;
+    color: #FFFF;
+}
+
+.watchnow{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    padding: 8px 18px;
+    gap: 4px;
+    width: 261px;
+    height: 55px;
+    background: #2791C2;
+    border-radius: 31px;
+}
+
+.watchnow > button {
+    font-family: 'Open Sans', sans-serif;
+    font-style: normal;
+    font-weight: 700;
+    font-size: 15px;
+    line-height: 20px;
+    color: #FFFFFF;
+    background: #2791C2;
+    border: none;
 }
 
 .cards{
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
 }
 
 .card{
@@ -42,8 +138,8 @@ nav > input{
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-end;
-    width: 250px;
-    height: 400px;
+    width: 320px;
+    height: 440px;
     border: solid;
     padding: 30px;
 }
