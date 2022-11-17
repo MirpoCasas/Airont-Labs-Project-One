@@ -1,9 +1,44 @@
+body{
+  background-image: url("./src/back 2.png");
+  font-family: 'Open Sans', sans-serif;
+  background-color: rgba(0, 0, 0, 0.918); 
+  height: 500px;  
+  background-repeat: no-repeat; 
+  background-size: cover; 
+
+}
+
 .App {
-  font-family: sans-serif;
   text-align: center;
   display: flex;
   flex-direction: column;
   align-items: center;
+  
+}
+
+.App > h1 {
+  font-family: 'Montserrat', sans-serif;
+  color: #2791C2;
+  margin-top: 72px;
+  margin-bottom: 56px;
+
+  font-family: Montserrat;
+  font-size: 36px;
+  font-weight: 900;
+  line-height: 32px;
+  letter-spacing: 0em;
+  text-align: left;
+
+
+}
+.App > h1 > span{
+  font-family: Montserrat;
+  font-size: 36px;
+  font-style: italic;
+  font-weight: 500;
+  line-height: 32px;
+  letter-spacing: 0em;
+  text-align: left;
 }
 
 .one {
@@ -12,9 +47,9 @@
 }
 
 .login {
-  border: solid;
   width: 445px;
   height: 570px;
+  background: rgba(49, 49, 49, 0.95);
   box-shadow: 0px 6px 6px rgba(11, 11, 11, 0.8);
   border-radius: 10px;
   padding: 32px 45px 42px 43px;
@@ -22,14 +57,20 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  color: #fff;
+}
+
+.welcome-msg{
 }
 
 .welcome-msg1{
+  margin: 0;
   font-size: 16px;
   font-weight: 700;
 }
 
 .welcome-msg2{
+  margin: 0;
   font-size: 10px;
   font-weight: 400;
 }
@@ -45,7 +86,6 @@
   align-items: center;
   justify-content: space-between;
   width: 356px;
-  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 10px;
@@ -53,6 +93,7 @@
 }
 
 .login-button{
+  background: #2791C2;
   display: flex;
   flex-direction: row;
   justify-content: center;
@@ -61,9 +102,7 @@
   gap: 4px;
   border-radius: 31px;
   width: 354px;
-  height: 47px;
-  font-family: 'Open Sans';
-  font-style: normal;
+  height: 35px;
   font-weight: 700;
   font-size: 15px;
   line-height: 20px;
@@ -73,11 +112,11 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  font-weight: 400;
 
 }
 
 .register-link{
-  font-family: 'Open Sans';
   font-style: normal;
   font-weight: 400;
   font-size: 10px;
@@ -87,7 +126,7 @@
 h2 {
   width: 100%; 
   text-align: center; 
-  border-bottom: 1px solid #000; 
+  border-bottom: 1px solid #ffff; 
   line-height: 0.1em;
   margin: 10px 0px 20px; 
   
@@ -95,14 +134,34 @@ h2 {
 } 
 
 h2 span { 
-  background:#fff; 
-  padding:0 10px; 
+  background:rgba(49, 49, 49, 0.95);
+  padding:0 30px;
+  font-weight: 400;
+  font-size: 13px;
+
 }
 
 .social-login{
+  display: flex;
+  align-items: center;
+  padding-left: 70px ;
   border: 1px solid;
   border-radius: 35px;
   margin: 10px 0px;
   width: 354px;
   height: 47px;
+  font-family: 'Open Sans';
+  font-style: normal;
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.social-login > img{
+  width: 28px;
+  height: 29px;
+
+}
+.social-login > p{
+  padding-left: 17px;
+
 }
