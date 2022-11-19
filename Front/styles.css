@@ -1,5 +1,6 @@
 body{
     margin: 0;
+    background: #111111;
 }
 
 nav{
@@ -65,8 +66,8 @@ nav > input{
     line-height: 16px;
 }
 
+
 .preview{
-    background: grey;
     height: 549.59px;
     padding: 49px;
     background-image: url("./src/Avatar 1.png");
@@ -128,18 +129,87 @@ nav > input{
     border: none;
 }
 
-.cards{
+.recommended{
     display: flex;
-    justify-content: space-around;
+    flex-direction: column;
+    align-items: center;
+    color: white;
+    font-family: 'Open Sans', sans-serif;
+    font-style: normal;
 }
 
-.card{
+.recommended_bar{
+    width: 1084px;
+    display: flex;
+    background: #302828;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.cardstitle{
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 64px;
+    padding: 0px 30px;
+}
+
+.layoutbuttons{
+    display: flex;
+    margin: 0px 15px;
+}
+
+.layoutbutton{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.cards.vertical {
+    display: grid;
+    grid-template-columns: 0.295fr 0.057fr 0.295fr 0.057fr 0.295fr;
+    grid-template-rows: 440px;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    width: 1084px;
+    height: 440px;
+    background: #162c8d;
+    margin: 50px;
+}
+
+.cards > h2{
+    font-weight: 700;
+    font-size: 24px;
+}
+
+.cards > p{
+    font-weight: 400;
+    font-size: 12px;
+}
+
+.card1, .card2 ,.card3{
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-end;
-    width: 320px;
-    height: 440px;
-    border: solid;
-    padding: 30px;
+    padding: 30px; 
+    background: #525252;
 }
+
+.vertical.card1 { grid-area: 1 / 1 / 2 / 2; }
+.vertical.card2 { grid-area: 1 / 3 / 2 / 4; }
+.vertical.card3 { grid-area: 1 / 5 / 2 / 6; }
+
+.cards.horizontal {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 0.309fr 0.035fr 0.309fr 0.035fr 0.309fr;
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    height: 1420px;
+    margin: 50px;
+    width: 1220px;
+}
+    
+.horizontal.card1 { grid-area: 3 / 1 / 4 / 2; }
+.horizontal.card2 { grid-area: 1 / 1 / 2 / 2; }
+.horizontal.card3 { grid-area: 5 / 1 / 6 / 2; }

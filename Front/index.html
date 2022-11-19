@@ -10,6 +10,7 @@
       href="https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,500;0,900;1,500;1,900&family=Open+Sans:wght@300;400;700&display=swap"
       rel="stylesheet"
     />
+    <script src="./scripts.js"></script>
     <title>MOVIEfinder</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -41,10 +42,20 @@
           <button>Watch Now</button>
       </div>
     </div>
-    <div>
-      <p>Most Watched Movies</p>
-      <div class="cards">
-        <div class="card">
+    <div class="recommended">
+      <div class="recommended_bar">
+        <h2 class="cardstitle">Most Watched Movies</h2>
+        <div class="layoutbuttons">
+          <div class="layoutbutton">
+            <img src="./src/Switch3.svg" alt="Vertical Layout" id="menu3">
+          </div>
+          <div class="layoutbutton" >
+            <img src="./src/Rectangle 30.svg" alt="Horizontal Layout" id="menu1">
+          </div>
+        </div>
+      </div>
+      <div class="cards horizontal" id="cont">
+        <div class="card1 horizontal" id="card1">
           <h2>Title</h2>
           <p>stars</p>
           <p>
@@ -53,7 +64,7 @@
             nesciunt sunt maxime ratione quia cumque nisi nobis nam.
           </p>
         </div>
-        <div class="card">
+        <div class="card2 horizontal" id="card2">
           <h2>Title</h2>
           <p>stars</p>
           <p>
@@ -62,7 +73,7 @@
             nesciunt sunt maxime ratione quia cumque nisi nobis nam.
           </p>
         </div>
-        <div class="card">
+        <div class="card3 horizontal" id="card3">
           <h2>Title</h2>
           <p>stars</p>
           <p>
