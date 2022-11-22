@@ -195,7 +195,9 @@ nav > input{
     align-items: flex-start;
     justify-content: flex-end;
     padding: 30px; 
-    border: solid;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 
 .vertical.card1 { grid-area: 1 / 1 / 2 / 2; }

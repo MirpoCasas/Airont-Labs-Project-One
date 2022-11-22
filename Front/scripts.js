@@ -1,4 +1,5 @@
 /* API key = 47521ec4cb0fc520db13de6730790654 */
+const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
 let movies = [];
 
@@ -81,6 +82,22 @@ let genres = [
     },
 ];
 
+function createCard(title, desc, position, img_path) {
+    desc = abridge(desc)
+    const cardPlace = 'card' + position;
+    const newCard = document.createElement('div');
+    let imgDone = IMG_URL + img_path
+    console.log(imgDone);
+    newCard.style.backgroundImage = `URL(${imgDone})`
+    newCard.classList.add(cardPlace, 'vertical');
+    newCard.innerHTML = `
+    <h2 id="_title">${title}</h2>
+    <p id="${cardPlace}_desc">${desc}</span>
+    `
+
+    return newCard;
+}
+
 function giveGenres(genrelist) {
     res = [];
 
@@ -136,9 +153,11 @@ const createList = async () => {
     var menu3 = document.getElementById("menu3");
     var menu1 = document.getElementById("menu1");
 
-    let card1 = createCard(movies[1].original_title, movies[1].overview, 1)
-    let card2 = createCard(movies[2].original_title, movies[2].overview, 2)
-    let card3 = createCard(movies[3].original_title, movies[3].overview, 3)
+    console.log(movies);
+
+    let card1 = createCard(movies[1].original_title, movies[1].overview, 1, movies[1].poster_path)
+    let card2 = createCard(movies[2].original_title, movies[2].overview, 2, movies[2].poster_path)
+    let card3 = createCard(movies[3].original_title, movies[3].overview, 3, movies[3].poster_path)
 
 
 
@@ -170,10 +189,10 @@ const createList = async () => {
     console.log(card1);
 }
 
+createList()
 
 
 window.onload = function () {
-    createList()
     let fronttitle = document.getElementById("preview_title");
     let frontdesc = document.getElementById("preview_desc");
     let frontgenre = document.getElementById("preview_genre");
@@ -188,15 +207,3 @@ window.onload = function () {
 };
 
 
-function createCard(title, desc, position) {
-    desc = abridge(desc)
-    const cardPlace = 'card' + position;
-    const newCard = document.createElement('div');
-    newCard.classList.add(cardPlace, 'vertical');
-    newCard.innerHTML = `
-    <h2 id="${cardPlace}_title">${title}</h2>
-    <p id="${cardPlace}_desc">${desc}</span>
-    `
-
-    return newCard;
-}
