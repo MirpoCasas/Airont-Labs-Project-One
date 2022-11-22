@@ -1,6 +1,6 @@
 body{
     margin: 0;
-    background: #111111;
+    background: #1E1E1E;
 }
 
 nav{
@@ -69,11 +69,13 @@ nav > input{
 
 .preview{
     height: 549.59px;
-    padding: 49px;
+    padding: 0px 179px;
     background-image: url("./src/Avatar 1.png");
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    display: flex;
+    flex-direction: column;
 }
 
 .genre{
@@ -83,6 +85,8 @@ nav > input{
     font-size: 14px;
     line-height: 16px;   
     color: #0FEFFD;
+    margin: 89px 0px 47px 0px;
+    width: fit-content;
 }
 
 .movietitle{
@@ -92,17 +96,19 @@ nav > input{
     font-size: 56px;
     line-height: 64px;
     color: #FFFFFF;
+    margin: 0;
+    width: 605px;
 }
 
 .descriptioncont{
     width: 605px;
-    height: 127px;
     font-family: 'Open Sans', sans-serif;
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
     line-height: 32px;
     color: #FFFF;
+    margin: 20px 0px 28px 0px;
 }
 
 .watchnow{
@@ -110,7 +116,6 @@ nav > input{
     flex-direction: row;
     justify-content: center;
     align-items: center;
-    padding: 8px 18px;
     gap: 4px;
     width: 261px;
     height: 55px;
@@ -141,7 +146,6 @@ nav > input{
 .recommended_bar{
     width: 1084px;
     display: flex;
-    background: #302828;
     align-items: center;
     justify-content: space-between;
 }
@@ -172,7 +176,6 @@ nav > input{
     grid-row-gap: 0px;
     width: 1084px;
     height: 440px;
-    background: #162c8d;
     margin: 50px;
 }
 
@@ -192,7 +195,7 @@ nav > input{
     align-items: flex-start;
     justify-content: flex-end;
     padding: 30px; 
-    background: #525252;
+    border: solid;
 }
 
 .vertical.card1 { grid-area: 1 / 1 / 2 / 2; }
