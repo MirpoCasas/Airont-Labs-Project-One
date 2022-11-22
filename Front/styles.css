@@ -215,6 +215,6 @@ nav > input{
     width: 1220px;
 }
     
-.horizontal.card1 { grid-area: 3 / 1 / 4 / 2; }
-.horizontal.card2 { grid-area: 1 / 1 / 2 / 2; }
+.horizontal.card1 { grid-area: 1 / 1 / 2 / 2; }
+.horizontal.card2 { grid-area: 3 / 1 / 4 / 2; }
 .horizontal.card3 { grid-area: 5 / 1 / 6 / 2; }

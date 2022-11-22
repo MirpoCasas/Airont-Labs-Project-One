@@ -1,7 +1,7 @@
 /* API key = 47521ec4cb0fc520db13de6730790654 */
 const IMG_URL = 'https://image.tmdb.org/t/p/w500';
 
-let movies = [];
+let movies = []
 
 let genres = [
     {
@@ -83,6 +83,7 @@ let genres = [
 ];
 
 function createCard(title, desc, position, img_path) {
+    console.log(`creating card ${position}`)
     desc = abridge(desc)
     const cardPlace = 'card' + position;
     const newCard = document.createElement('div');
@@ -99,6 +100,7 @@ function createCard(title, desc, position, img_path) {
 }
 
 function giveGenres(genrelist) {
+    console.log('seting genres');
     res = [];
 
     genrelist.forEach((genre_id) => {
@@ -112,12 +114,13 @@ function giveGenres(genrelist) {
     return res;
 }
 
-var requestOptions = {
+const requestOptions = {
     method: "GET",
     redirect: "follow",
 };
 
-function abridge(message){
+function abridge(message) {
+    console.log('shortening msg');
     if (message.length > 84) {
       return message.slice(0,84) + " ...";
     } else {
@@ -142,16 +145,27 @@ const getMoviesData = async () => {
 
 
 const setMovies = async () => {
+    console.log('asingnig value to movies');
     const raw = await getMoviesData();
-
+    
     movies = await raw.results;
+    console.log('data assigned');
+    return movies;
 }
 
+const setFrontMovie = () => {
+    console.log('setFrontMovie');
+    const mainCont = document.getElementById('frontcont');
+
+    mainCont.innerHTML
+}
 const createList = async () => {
-    await setMovies();
-    var cont = document.getElementById("cont");
-    var menu3 = document.getElementById("menu3");
-    var menu1 = document.getElementById("menu1");
+    console.log('starting create list');
+    movies = await setMovies();
+    console.log('data in create list');
+    const cont = document.getElementById("cont");
+    const menu3 = document.getElementById("menu3");
+    const menu1 = document.getElementById("menu1");
 
     console.log(movies);
 
@@ -186,24 +200,16 @@ const createList = async () => {
         card3.classList.remove("horizontal");
         card3.classList.add("vertical");
     });
+    
     console.log(card1);
 }
 
 createList()
+console.log('logging movies');
+console.log(movies);
 
+window.onload = () => {
+    console.log('logging movies');
+    console.log(movies);
 
-window.onload = function () {
-    let fronttitle = document.getElementById("preview_title");
-    let frontdesc = document.getElementById("preview_desc");
-    let frontgenre = document.getElementById("preview_genre");
-    
-    //Front page movie
-    fronttitle.innerHTML = movies[0].original_title;
-
-    frontdesc.innerHTML = movies[0].overview;
-    
-    frontgenre.innerHTML = giveGenres(movies[0].genre_ids).join(", ")
-
-};
-
-
+}
