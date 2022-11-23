@@ -152,13 +152,6 @@ const setMovies = async () => {
     console.log('data assigned');
     return movies;
 }
-
-const setFrontMovie = () => {
-    console.log('setFrontMovie');
-    const mainCont = document.getElementById('frontcont');
-
-    mainCont.innerHTML
-}
 const createList = async () => {
     console.log('starting create list');
     movies = await setMovies();
@@ -173,12 +166,9 @@ const createList = async () => {
     let card2 = createCard(movies[2].original_title, movies[2].overview, 2, movies[2].poster_path)
     let card3 = createCard(movies[3].original_title, movies[3].overview, 3, movies[3].poster_path)
 
-
-
     cont.append(card1);
     cont.append(card2);
     cont.append(card3);
-    
     
     menu1.addEventListener("click", function () {
         cont.classList.remove("vertical");
@@ -205,11 +195,36 @@ const createList = async () => {
 }
 
 createList()
-console.log('logging movies');
+console.log('logging movies before asigning');
 console.log(movies);
+
+function setMain() {
+    console.log('setting main movie');
+    let mainMovie = movies[0];
+    let title = mainMovie.original_title;
+    let desc = mainMovie.overview;
+    let genres = giveGenres(mainMovie.genre_ids).join(', ');
+    const cont = document.getElementById('frontcont');
+    let newEl = document.createElement('div');
+    newEl.innerHTML = `
+    <p class="genre" id="preview_genre">${genres}</p>
+    <h2 class="movietitle" id="preview_title">${title}</h2>
+    <div class="descriptioncont">
+    <p class="description" id="preview_desc">
+    ${desc}
+    </p>
+    </div>
+    `;
+    cont.append(newEl);
+    
+    let background = document.getElementById('frontpreview')
+    let img = IMG_URL + mainMovie.poster_path;
+    background.style.backgroundImage = `URL(${img})`
+}
 
 window.onload = () => {
     console.log('logging movies');
     console.log(movies);
+    setMain();
 
 }
