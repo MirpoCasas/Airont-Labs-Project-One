@@ -49,11 +49,6 @@ body{
   text-align: left;
 }
 
-.one {
-  border: solid 1px;
-  width: min-content;
-}
-
 .login {
   width: 445px;
   height: 570px;
@@ -79,7 +74,7 @@ body{
   margin-bottom: 14px;
   display: flex;
   flex-direction: column;
-  justify-content: baseline;
+  justify-content: space-around;
 }
 
 .welcome-msg1{
@@ -274,9 +269,115 @@ h2 span {
 --------------------------------------------*/
 @media all and (min-width: 640px) and (max-width: 834px) { 
   body{
-    background-image: url("./src/back2.png")
+    background-image: url("./src/back2.png");
   }
 
 }
  
-@media all and (max-width: 640x) { }
+@media all and (max-width: 640px) { 
+
+  body{
+    background-image: url("./src/back3.png");
+  }
+
+  .App h1{
+    font-size: 42px;
+  }
+
+  .login{
+    width: 580px;
+    height: 1029px;
+  }
+
+  .welcome-msg{
+    width: 545px;
+    height: 88px;
+    margin-bottom: 30px;
+  }
+
+  .welcome-msg1{
+    font-size: 24px;
+  }
+  .welcome-msg2{
+    font-size: 24px;
+  }
+  
+  .inputbox{
+    width: 486px;
+    height: 70px;
+    padding: 19px 19px;
+    margin: 10px 0px;
+    justify-content: space-between;
+
+  }
+
+  .inputbox input{
+    height: 32px;
+    width: 450px;
+    font-size: 24px;
+    margin: 0px 6px;
+  }
+
+  .imgcont img{
+    width: 38px;
+  }
+
+  .underlogin{
+    font-size: 20px;
+    width: 500px;
+  }
+
+  #rememberbox{
+    height: 30px;
+    width: 30px;
+    margin: 9px 8px 25px 5px;
+  }
+
+  .remember p{
+    height: 30px;
+    line-height: 20px;
+  }
+
+  .underlogin_link{
+    margin-right: 5px;
+    line-height: 12px;
+  }
+
+
+  .login-button{
+    width: 486px;
+    height: 70px;
+    font-size: 24px;
+  }
+
+  .register-link{
+    font-size: 20px;
+    width: 303px;
+    height: 32px;
+    margin: 40px 0px 42.5px 0px;
+  }
+
+  .social-login{
+    width: 487px;
+    height: 70px;
+    margin: 20px 0px;
+  }
+
+  h2 {
+    margin-bottom: 40px;
+  }
+  
+  h2 span{
+    font-size: 20px;
+  }
+
+  .loginsocialbutton{
+    font-size: 24px;
+  }
+
+  .loginsocialbutton img{
+    width: 44px;
+    height: 44px;
+  }
+
+}
