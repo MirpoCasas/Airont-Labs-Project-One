@@ -192,11 +192,10 @@ const createList = async () => {
     });
     
     console.log(card1);
+    setMain();
 }
 
 createList()
-console.log('logging movies before asigning');
-console.log(movies);
 
 function setMain() {
     console.log('setting main movie');
@@ -220,11 +219,4 @@ function setMain() {
     let background = document.getElementById('frontpreview')
     let img = IMG_URL + mainMovie.poster_path;
     background.style.backgroundImage = `URL(${img})`
-}
-
-window.onload = () => {
-    console.log('logging movies');
-    console.log(movies);
-    setMain();
-
 }
