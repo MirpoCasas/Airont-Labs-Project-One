@@ -1,0 +1,23 @@
+{
+  "name": "airontlabs-website",
+  "version": "1.0.0",
+  "description": "A page created for Airont Lab's Front End BootCamp. It is a movie searcher.",
+  "main": "index.js",
+  "scripts": {
+    "start": "json-server db.json -m ./node_modules/json-server-auth"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/MirpoCasas/Airont-Labs-Project-One.git"
+  },
+  "author": "Martin Casas",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/MirpoCasas/Airont-Labs-Project-One/issues"
+  },
+  "homepage": "https://github.com/MirpoCasas/Airont-Labs-Project-One#readme",
+  "devDependencies": {
+    "json-server": "^0.17.1",
+    "json-server-auth": "^2.1.0"
+  }
+}

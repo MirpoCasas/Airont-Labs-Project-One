@@ -1,0 +1,19 @@
+{
+  "users": [
+    {
+      "email": "test1@fakemail.com",
+      "password": "$2a$10$9kTXsYC5iwtM3bDQ5WncJ.N/7QHMmKb5xpgdtXiRkxdrZYKqObgNO",
+      "id": 1
+    },
+    {
+      "email": "test2@fakemail.com",
+      "password": "$2a$10$aSpSQ6rx5n7CqT1lh8E/k.oiYDigHSflJiNJDPO0OUMCKb5KNyfG6",
+      "id": 2
+    },
+    {
+      "email": "test3@fakemail.com",
+      "password": "$2a$10$6QwWZg0rBg5VRqM.UHLUAu9GSIB7XdtC2WjwhvBqhZtggHP5sWB4W",
+      "id": 3
+    }
+  ]
+}
