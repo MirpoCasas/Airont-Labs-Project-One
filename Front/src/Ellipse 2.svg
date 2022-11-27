@@ -1,0 +1,14 @@
+<svg width="45" height="46" viewBox="0 0 45 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="45" height="46" fill="#1E1E1E"/>
+<rect width="1440" height="1349" transform="translate(-1295 -12)" fill="url(#paint0_linear_0_1)"/>
+<rect x="-1295" y="-12" width="1440" height="69.9482" fill="#2791C2"/>
+<ellipse cx="22.5" cy="23.4737" rx="22.5" ry="22.4833" fill="#D9D9D9"/>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M22.7667 24.9278C26.6203 24.9278 29.7443 21.8062 29.7443 17.9554C29.7443 14.1046 26.6203 10.983 22.7667 10.983C18.913 10.983 15.7891 14.1046 15.7891 17.9554C15.7891 21.8062 18.913 24.9278 22.7667 24.9278Z" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<path d="M33.5333 35.0696C31.9203 30.51 27.6063 27.4617 22.7667 27.4617C17.9271 27.4617 13.613 30.51 12 35.0696" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+<defs>
+<linearGradient id="paint0_linear_0_1" x1="720" y1="0" x2="720" y2="1349" gradientUnits="userSpaceOnUse">
+<stop stop-color="#2F2F2F" stop-opacity="0"/>
+<stop offset="1"/>
+</linearGradient>
+</defs>
+</svg>
