@@ -1,11 +1,4 @@
 /* API key = 47521ec4cb0fc520db13de6730790654 */
-
-function getImg(source, size) {
-    const IMG_URL = 'https://image.tmdb.org/t/p/';
-    let final = IMG_URL + size + source;
-    return final;
-}
-
 let movies = []
 
 let genres = [
@@ -87,6 +80,13 @@ let genres = [
     },
 ];
 
+function getImg(source, size) {
+    const IMG_URL = 'https://image.tmdb.org/t/p/';
+    let final = IMG_URL + size + source;
+    return final;
+}
+
+
 function createCard(title, desc, position, img_path) {
     console.log(`creating card ${position}`)
     desc = abridge(desc)
@@ -148,6 +148,15 @@ const getMoviesData = async () => {
     }
 };
 
+const setMovies = async () => {
+    console.log('asingnig value to movies');
+    const raw = await getMoviesData();
+    
+    movies = await raw.results;
+    console.log('data assigned');
+    return movies;
+}
+
 function setMain() {
     console.log('setting main movie');
     let mainMovie = movies[0];
@@ -172,14 +181,6 @@ function setMain() {
     background.style.backgroundImage = `URL(${img})`
 }
 
-const setMovies = async () => {
-    console.log('asingnig value to movies');
-    const raw = await getMoviesData();
-    
-    movies = await raw.results;
-    console.log('data assigned');
-    return movies;
-}
 const createList = async () => {
     console.log('starting create list');
     movies = await setMovies();
@@ -187,12 +188,18 @@ const createList = async () => {
     const cont = document.getElementById("cont");
     const menu3 = document.getElementById("menu3");
     const menu1 = document.getElementById("menu1");
-
+    
     console.log(movies);
+
+    for (j = 1, j < movies.length; j += 3;) {
+        
+    }
 
     let card1 = createCard(movies[1].original_title, movies[1].overview, 1, movies[1].backdrop_path)
     let card2 = createCard(movies[2].original_title, movies[2].overview, 2, movies[2].backdrop_path)
     let card3 = createCard(movies[3].original_title, movies[3].overview, 3, movies[3].backdrop_path)
+
+    console.log(card1)
 
     cont.append(card1);
     cont.append(card2);
