@@ -1,5 +1,10 @@
 /* API key = 47521ec4cb0fc520db13de6730790654 */
-const IMG_URL = 'https://image.tmdb.org/t/p/w500';
+
+function getImg(source, size) {
+    const IMG_URL = 'https://image.tmdb.org/t/p/';
+    let final = IMG_URL + size + source;
+    return final;
+}
 
 let movies = []
 
@@ -87,7 +92,7 @@ function createCard(title, desc, position, img_path) {
     desc = abridge(desc)
     const cardPlace = 'card' + position;
     const newCard = document.createElement('div');
-    let imgDone = IMG_URL + img_path
+    let imgDone = getImg(img_path, "original")
     console.log(imgDone);
     newCard.style.backgroundImage = `URL(${imgDone})`
     newCard.classList.add(cardPlace, 'vertical');
@@ -114,11 +119,6 @@ function giveGenres(genrelist) {
     return res;
 }
 
-const requestOptions = {
-    method: "GET",
-    redirect: "follow",
-};
-
 function abridge(message) {
     console.log('shortening msg');
     if (message.length > 84) {
@@ -129,6 +129,11 @@ function abridge(message) {
   }
 
 const getMoviesData = async () => {
+    const requestOptions = {
+        method: "GET",
+        redirect: "follow",
+    };
+    
     try {
         const res = await fetch(
             "https://api.themoviedb.org/3/movie/popular?api_key=47521ec4cb0fc520db13de6730790654&language=en-US&page=1/",
@@ -137,12 +142,35 @@ const getMoviesData = async () => {
         const data = await res.json();
 
         return data
-
+        
     } catch (error) {
         console.log(error)
     }
 };
 
+function setMain() {
+    console.log('setting main movie');
+    let mainMovie = movies[0];
+    let title = mainMovie.original_title;
+    let desc = mainMovie.overview;
+    let genres = giveGenres(mainMovie.genre_ids).join(', ');
+    const cont = document.getElementById('frontcont');
+    let newEl = document.createElement('div');
+    newEl.innerHTML = `
+    <p class="genre" id="preview_genre">${genres}</p>
+    <h2 class="movietitle" id="preview_title">${title}</h2>
+    <div class="descriptioncont">
+    <p class="description" id="preview_desc">
+    ${desc}
+    </p>
+    </div>
+    `;
+    cont.append(newEl);
+    
+    let background = document.getElementById('frontpreview')
+    let img = getImg(mainMovie.backdrop_path, "original")
+    background.style.backgroundImage = `URL(${img})`
+}
 
 const setMovies = async () => {
     console.log('asingnig value to movies');
@@ -162,9 +190,9 @@ const createList = async () => {
 
     console.log(movies);
 
-    let card1 = createCard(movies[1].original_title, movies[1].overview, 1, movies[1].poster_path)
-    let card2 = createCard(movies[2].original_title, movies[2].overview, 2, movies[2].poster_path)
-    let card3 = createCard(movies[3].original_title, movies[3].overview, 3, movies[3].poster_path)
+    let card1 = createCard(movies[1].original_title, movies[1].overview, 1, movies[1].backdrop_path)
+    let card2 = createCard(movies[2].original_title, movies[2].overview, 2, movies[2].backdrop_path)
+    let card3 = createCard(movies[3].original_title, movies[3].overview, 3, movies[3].backdrop_path)
 
     cont.append(card1);
     cont.append(card2);
@@ -195,28 +223,12 @@ const createList = async () => {
     setMain();
 }
 
-createList()
-
-function setMain() {
-    console.log('setting main movie');
-    let mainMovie = movies[0];
-    let title = mainMovie.original_title;
-    let desc = mainMovie.overview;
-    let genres = giveGenres(mainMovie.genre_ids).join(', ');
-    const cont = document.getElementById('frontcont');
-    let newEl = document.createElement('div');
-    newEl.innerHTML = `
-    <p class="genre" id="preview_genre">${genres}</p>
-    <h2 class="movietitle" id="preview_title">${title}</h2>
-    <div class="descriptioncont">
-    <p class="description" id="preview_desc">
-    ${desc}
-    </p>
-    </div>
-    `;
-    cont.append(newEl);
-    
-    let background = document.getElementById('frontpreview')
-    let img = IMG_URL + mainMovie.poster_path;
-    background.style.backgroundImage = `URL(${img})`
+window.onload = () => {
+    const authKey = localStorage.getItem('auth')
+    console.log(authKey)
+    if (authKey === null) {
+        window.location.href = '../Login/index.html'
+    }
+    createList()
 }
+

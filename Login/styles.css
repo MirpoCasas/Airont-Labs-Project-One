@@ -123,9 +123,10 @@ body{
 }
 
 .loginresponse{
-  background-color: #2791C2;
+  background-color: #c23e27;
+  border-radius: 10px;
   height: 20px;
-  width: 300px;
+  width: 100%;
   font-size: 9px;
   display: none; 
   align-items: center;

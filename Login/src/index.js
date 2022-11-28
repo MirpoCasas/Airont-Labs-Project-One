@@ -1,45 +1,86 @@
 let passRegEx = new RegExp(/^(?=.*\d)(?=.*[A-Z])(?=.*[a-z])(?=.*[^\w\d\s:])([^\s]){8,20}$/);
 let emailRegEx = new RegExp(/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/)
+let responseField = document.querySelector('.loginresponse')
+let loginform = document.querySelector(".loginform");
+let password = document.querySelector("#password");
+let email = document.querySelector("#email");
+let showpass = document.querySelector('.imgcont');
 
+// This function sets up the fetch
+// function to be used on the log in.
 
-function loginFetch(finalObject) {
+async function loginFetch(finalObject) {
 
     var myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
-    
+
     var raw = JSON.stringify(finalObject);
-    
+
     var requestOptions = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-      redirect: 'follow'
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
+        redirect: 'follow'
     };
 
-    fetch("http://localhost:3000/login", requestOptions)
-    .then(response => response.text())
-    .then(result => console.log(result))
-    .catch(error => console.log('error', error));
+    const response = await fetch("http://localhost:3000/login", requestOptions)
+
+    if (!response.ok) {
+        console.log(response)
+        const status = await response.text();
+        console.log(status)
+        responseField.style.display = 'flex'
+        responseField.innerHTML = `
+        <p>${status}</p>
+        `
+    } else {
+        responseField.style.display = 'flex'
+        responseField.style.backgroundColor = "green"
+        responseField.innerHTML = `
+        <p>Success!</p>
+        `
+        console.log(response)
+        const res = await response.json();
+        console.log(res);
+        const token = res.accessToken
+        console.log(token)
+        
+        localStorage.setItem('auth',token )
+        
+        window.location.href = '../Front/index.html'
+    }
+
 }
 
 
 
 document.addEventListener("DOMContentLoaded", () => {
-    let loginform = document.querySelector(".loginform");
-    let password = document.querySelector("#password");
-    let email = document.querySelector("#email");
     
+    
+      // This next part adds the ability to change
+      // the password to be seen or hidden.
+
+    showpass.addEventListener("click", (e) => {
+        if (password.type === "password") {
+            password.type = 'text'
+        } else if (password.type === "text") {
+            password.type = 'password'
+        }
+    })
+
+    // This next part handles the log in validation
+
     loginform.addEventListener("submit", e => {
         
         e.preventDefault();
         
         let error = 0;
-        let passValue = password.value;
-        let emailValue = email.value;
+        let passValue = "FakePass123.";
+        let emailValue = "test1@fakemail.com";
         let curatedPassword = '';
         let curatedEmail = '';
         let object = {}
-
+        
         if (passValue === '') {
             console.log('password cant be empty');
             error++;
