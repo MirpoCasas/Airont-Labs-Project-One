@@ -80,6 +80,7 @@ let genres = [
     },
 ];
 
+//gets img based on source and desired size
 function getImg(source, size) {
     if (source === null) {
         return ""
@@ -89,14 +90,14 @@ function getImg(source, size) {
     return final;
 }
 
-
+//creates a card for the display
 function createCard(title, desc, position, img_path) {
     console.log(`creating card ${position}`)
     desc = abridge(desc)
     const cardPlace = 'card' + position;
     const newCard = document.createElement('div');
     let imgDone = getImg(img_path, "original")
-    newCard.style.backgroundImage = `URL(${imgDone})`
+    newCard.style.backgroundImage = `linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%), url(${imgDone})`
     newCard.classList.add(cardPlace, 'vertical');
     newCard.innerHTML = `
     <h2 id="_title">${title}</h2>
@@ -105,7 +106,7 @@ function createCard(title, desc, position, img_path) {
 
     return newCard;
 }
-
+//returns genres from ids
 function giveGenres(genrelist) {
     console.log('seting genres');
     res = [];
@@ -120,15 +121,16 @@ function giveGenres(genrelist) {
 
     return res;
 }
-
+//shroten msg for card
 function abridge(message) {
     if (message.length > 84) {
-      return message.slice(0,84) + " ...";
+      return message.slice(0,140) + " ...";
     } else {
       return message
     }
-  }
-
+}
+  
+//fetch to get movie data. returns JSON.
 const getMoviesData = async () => {
     const requestOptions = {
         method: "GET",
@@ -148,7 +150,7 @@ const getMoviesData = async () => {
         console.log(error)
     }
 };
-
+// assign movies to variable
 const setMovies = async () => {
     console.log('asingnig value to movies');
     const raw = await getMoviesData();
@@ -158,6 +160,7 @@ const setMovies = async () => {
     return movies;
 }
 
+//populates the title card
 function setMain() {
     console.log('setting main movie');
     let mainMovie = movies[0];
@@ -179,9 +182,10 @@ function setMain() {
     
     let background = document.getElementById('frontpreview')
     let img = getImg(mainMovie.backdrop_path, "original")
-    background.style.backgroundImage = `URL(${img})`
+    background.style.backgroundImage = `linear-gradient(90deg, #080E20 0%, rgba(29, 29, 29, 0) 65.46%), URL(${img})`
 }
 
+//creates card array
 const createList = async () => {
     console.log('starting create list');
     movies = await setMovies();
@@ -201,56 +205,44 @@ const createList = async () => {
         let plusGrid = document.createElement("div");
         plusGrid.classList.add("cards", "vertical");
         
+        let fakei = i
 
-        console.log(i)
-        if (movies[i] != undefined) {
-            var card1 = createCard(movies[i].original_title, movies[i].overview, pos, movies[i].backdrop_path);
-        } else {
-            console.log('skipping empty');
-        };
-        console.log(i + 1);
-        if (movies[i + 1] != undefined) {
-            var card2 = createCard(movies[i + 1].original_title, movies[i + 1].overview, pos + 1, movies[i + 1].backdrop_path);
-        } else {
-            console.log('skipping empty');
-        };
-        console.log(i + 2);
-        if (movies[i + 2] != undefined) {
-            var card3 = createCard(movies[i + 2].original_title, movies[i + 2].overview, pos + 2, movies[i + 2].backdrop_path);
-        } else {
-            console.log('skipping empty');
-        };
-        
-        plusGrid.append(card1, card2, card3);
+        console.log("i value " + i)
+
+        for (j = 1; j < 4; j += 1){
+            console.log("j value " + j)
+  
+            console.log("fakei value " + fakei)
+            
+            if (movies[fakei] != undefined){
+                // eval("let card" + j +";")
+                eval("card" + j +" = createCard(movies[fakei].original_title, movies[fakei].overview, pos, movies[fakei].backdrop_path);")
+                eval("console.log(card" + j +");") 
+                eval("plusGrid.append(card" + j +");") 
+            } else {
+            
+                console.log("skipping");
+            }
+              pos += 1;
+              fakei += 1;   
+          }
+
+    
         console.log(plusGrid)
         recom.append(plusGrid)
         console.log(count)
         count++
+        console.log(count)
     }
     console.log(count)
 
     menu1.addEventListener("click", function () {
-        cont.classList.remove("vertical");
-        cont.classList.add("horizontal");
-        card1.classList.remove("vertical");
-        card1.classList.add("horizontal");
-        card2.classList.remove("vertical");
-        card2.classList.add("horizontal");
-        card3.classList.remove("vertical");
-        card3.classList.add("horizontal");
+        
     });
     menu3.addEventListener("click", function () {
-        cont.classList.remove("horizontal");
-        cont.classList.add("vertical");
-        card1.classList.remove("horizontal");
-        card1.classList.add("vertical");
-        card2.classList.remove("horizontal");
-        card2.classList.add("vertical");
-        card3.classList.remove("horizontal");
-        card3.classList.add("vertical");
+       
     });
-    
-    console.log(card1);
+    ;
 }
 
 window.onload = () => {
