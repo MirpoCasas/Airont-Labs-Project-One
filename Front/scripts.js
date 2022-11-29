@@ -81,6 +81,9 @@ let genres = [
 ];
 
 function getImg(source, size) {
+    if (source === null) {
+        return ""
+    }
     const IMG_URL = 'https://image.tmdb.org/t/p/';
     let final = IMG_URL + size + source;
     return final;
@@ -93,7 +96,6 @@ function createCard(title, desc, position, img_path) {
     const cardPlace = 'card' + position;
     const newCard = document.createElement('div');
     let imgDone = getImg(img_path, "original")
-    console.log(imgDone);
     newCard.style.backgroundImage = `URL(${imgDone})`
     newCard.classList.add(cardPlace, 'vertical');
     newCard.innerHTML = `
@@ -120,7 +122,6 @@ function giveGenres(genrelist) {
 }
 
 function abridge(message) {
-    console.log('shortening msg');
     if (message.length > 84) {
       return message.slice(0,84) + " ...";
     } else {
@@ -185,26 +186,49 @@ const createList = async () => {
     console.log('starting create list');
     movies = await setMovies();
     console.log('data in create list');
-    const cont = document.getElementById("cont");
+    const recom = document.getElementById("recom")
     const menu3 = document.getElementById("menu3");
     const menu1 = document.getElementById("menu1");
     
     console.log(movies);
+    console.log(movies.length)
+    setMain();
 
-    for (j = 1, j < movies.length; j += 3;) {
+    let count = 0
+
+    for (i = 1; i < movies.length; i += 3){
+        let pos = 1
+        let plusGrid = document.createElement("div");
+        plusGrid.classList.add("cards", "vertical");
         
+
+        console.log(i)
+        if (movies[i] != undefined) {
+            var card1 = createCard(movies[i].original_title, movies[i].overview, pos, movies[i].backdrop_path);
+        } else {
+            console.log('skipping empty');
+        };
+        console.log(i + 1);
+        if (movies[i + 1] != undefined) {
+            var card2 = createCard(movies[i + 1].original_title, movies[i + 1].overview, pos + 1, movies[i + 1].backdrop_path);
+        } else {
+            console.log('skipping empty');
+        };
+        console.log(i + 2);
+        if (movies[i + 2] != undefined) {
+            var card3 = createCard(movies[i + 2].original_title, movies[i + 2].overview, pos + 2, movies[i + 2].backdrop_path);
+        } else {
+            console.log('skipping empty');
+        };
+        
+        plusGrid.append(card1, card2, card3);
+        console.log(plusGrid)
+        recom.append(plusGrid)
+        console.log(count)
+        count++
     }
+    console.log(count)
 
-    let card1 = createCard(movies[1].original_title, movies[1].overview, 1, movies[1].backdrop_path)
-    let card2 = createCard(movies[2].original_title, movies[2].overview, 2, movies[2].backdrop_path)
-    let card3 = createCard(movies[3].original_title, movies[3].overview, 3, movies[3].backdrop_path)
-
-    console.log(card1)
-
-    cont.append(card1);
-    cont.append(card2);
-    cont.append(card3);
-    
     menu1.addEventListener("click", function () {
         cont.classList.remove("vertical");
         cont.classList.add("horizontal");
@@ -227,7 +251,6 @@ const createList = async () => {
     });
     
     console.log(card1);
-    setMain();
 }
 
 window.onload = () => {
