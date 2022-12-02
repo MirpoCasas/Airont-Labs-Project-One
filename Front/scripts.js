@@ -1,5 +1,5 @@
 const authKey = localStorage.getItem("auth");
-console.log(authKey);
+
 if (authKey === null) {
     // window.location.href = "../Login/index.html";
 }
@@ -9,6 +9,7 @@ let fetchPage = 1;
 let movies = [];
 let moviesToAdd = [];
 let layout = "vertical"
+const IMG_URL = "https://image.tmdb.org/t/p/";
 
 
 
@@ -96,13 +97,31 @@ function getImg(source, size) {
     if (source === null) {
         return "";
     }
-    const IMG_URL = "https://image.tmdb.org/t/p/";
     let final = IMG_URL + size + source;
     return final;
 }
 
+//shroten msg for card
+function abridge(message) {
+    if (message.length > 84) {
+        return message.slice(0, 150) + " ...";
+    } else {
+        return message;
+    }
+}
+
 //creates a card for the display
-function createCard(lay, title, desc, position, img_path) {
+function createCard(lay, movie, position) {
+    let title = movie.original_title
+    let desc = movie.overview
+    let img_path = movie.backdrop_path;
+    
+
+    // if no backdrop use poster
+    if (img_path === null) {
+         img_path = movie.poster_path;
+    }
+
     desc = abridge(desc);
     const cardPlace = "card" + position;
     const newCard = document.createElement("div");
@@ -120,7 +139,6 @@ function createCard(lay, title, desc, position, img_path) {
     `;
 
     let backgroundpic = newCard.firstElementChild
-    console.log(backgroundpic)
     backgroundpic.style.backgroundImage = `url("${imgDone}")`;
     let gradient = backgroundpic.nextElementSibling
     let watchcont = gradient.firstElementChild
@@ -128,21 +146,29 @@ function createCard(lay, title, desc, position, img_path) {
     gradient.style.background = "linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%)"
     watchcont.style.opacity = 0
     
+    // change fade and show watch when hover
     newCard.addEventListener("mouseenter", function () {
         gradient.style.background = "linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%)"
         watchcont.style.opacity = 1
         backgroundpic.style.transition = ("0.5s")
         backgroundpic.style.transform = ("scale(1.2)")
     });
+    // change fade and hide watch when hover out
     newCard.addEventListener("mouseleave", function () {
         gradient.style.background = "linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%)"
         watchcont.style.opacity = 0
         backgroundpic.style.transition = ("0.5s")
         backgroundpic.style.transform = ("scale(1)")
     });
+
+    newCard.addEventListener("click", function () {
+        console.log("click")
+        setModal(movie);
+    })
     
     return newCard;
 }
+
 //returns genres from ids
 function giveGenres(genrelist) {
     res = [];
@@ -157,17 +183,10 @@ function giveGenres(genrelist) {
 
     return res;
 }
-//shroten msg for card
-function abridge(message) {
-    if (message.length > 84) {
-        return message.slice(0, 140) + " ...";
-    } else {
-        return message;
-    }
-}
 
 //fetch to get movie data. returns JSON.
 async function getMoviesData(pageNum) {
+
     const requestOptions = {
         method: "GET",
         redirect: "follow",
@@ -187,6 +206,7 @@ async function getMoviesData(pageNum) {
 }
 // assign movies to variable
 async function setMovies() {
+
     const raw = await getMoviesData(fetchPage);
 
     movies = await raw.results;
@@ -194,8 +214,51 @@ async function setMovies() {
     return movies;
 }
 
+function setModal(movie) {
+    console.log("calling set modal");
+    console.log(movie);
+
+    const modalMain = document.querySelector(".modal");
+    const background = document.querySelector(".backgroundpart");
+    const modaltitle = document.querySelector(".modalTitle");
+    const modaldesc = document.querySelector(".modaldesc");
+    const modallanguage = document.querySelector("#modal_language");
+    const modalrelease = document.querySelector("#modal_releasedate");
+    const modalgenres = document.querySelector("#modal_genres");
+    const modalpopularity = document.querySelector("#modal_popularity");
+    const ofuscator = document.querySelector(".ofuscator");
+
+    
+    
+    modaltitle.textContent = movie.original_title;
+    modaldesc.textContent = movie.overview;
+    
+    //add background validation
+    let imgModal = getImg(movie.backdrop_path, "original");
+    console.log(imgModal);
+    
+    let genres = giveGenres(movie.genre_ids).join(", ");
+    modalgenres.textContent = genres;
+    modalrelease.textContent = movie.release_date;
+    
+    // add language getter    
+    modallanguage.textContent = movie.original_language;
+    
+    //add proper syntax
+    modalpopularity.textContent = movie.vote_average;
+    modalMain.style.display = "flex";
+    ofuscator.style.display = "block";
+    background.style.backgroundImage = `linear-gradient(359.32deg, #111111 0.53%, rgba(17, 17, 17, 0) 114.52%),url("${imgModal}")`;
+    
+    ofuscator.addEventListener("click", function () {
+        modalMain.style.display = "none";
+        ofuscator.style.display = "none";
+    })
+}
+
 //populates the title card
 function setMain(mainMovie) {
+
     let title = mainMovie.original_title;
     let desc = mainMovie.overview;
     let genres = giveGenres(mainMovie.genre_ids).join(", ");
@@ -217,32 +280,37 @@ function setMain(mainMovie) {
     background.style.backgroundImage = `linear-gradient(90deg, #080E20 0%, rgba(29, 29, 29, 0) 65.46%), URL(${img})`;
 }
 
+//populates the list
 function createList(movieArr) {
     const recom = document.getElementById("recom");
 
+    // takes out exceding movies for next call
     let leftover = movieArr.length % 3;
     moviesToAdd.push(movieArr.splice(-leftover));
-
+    // for every 3 entries, create a grid
     for (i = 0; i < movieArr.length; i += 3) {
         let pos = 1;
         let plusGrid = document.createElement("div");
         plusGrid.classList.add("cards", layout);
 
+        // alternative variable so as to not alter previous count
         let fakei = i;
 
+        // for every entry, create a card
         for (j = 1; j < 4; j += 1) {
+            // if for some reason the card is undefined, skip it
             if (movieArr[fakei] != undefined) {
-                // eval("let card" + j +";")
                 eval(
                     "card" +
                         j +
-                        " = createCard(layout,movieArr[fakei].original_title, movieArr[fakei].overview, pos, movieArr[fakei].backdrop_path);"
+                        " = createCard(layout,movieArr[fakei], pos);"
                 );
                 eval("plusGrid.append(card" + j + ");");
             }
             pos += 1;
             fakei += 1;
         }
+        // add grid to list
         recom.append(plusGrid);
     }
 }
@@ -252,7 +320,6 @@ async function createPage() {
     
     await setMovies();
 
-    const recom = document.getElementById("recom");
     const menu3 = document.getElementById("menu3");
     const menu1 = document.getElementById("menu1");
 
@@ -343,7 +410,6 @@ async function createPage() {
 }
 
 window.onload = () => {
-    document.querySelector(".loader").classList.add(layout)
+    
     createPage();
-    console.log(moviesToAdd);
 };

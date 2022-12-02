@@ -18,6 +18,18 @@ nav > input {
     border-radius: 5px;
 }
 
+.ofuscator{
+    display: none;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    backdrop-filter: blur(10px);
+    transition: all 2s;
+    z-index: 1;
+    left: 0;
+    top: 0;
+}
+
 .modal {
     display: none;
     flex-direction: column;
@@ -29,10 +41,10 @@ nav > input {
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-    z-index: 1;
+    z-index: 2;
     background: #111111;
     border-radius: 20px;
-
+    transition: all 2s;
     font-family: "Open Sans", sans-serif;
     font-style: normal;
 }
@@ -44,10 +56,12 @@ nav > input {
     width: 100%;
     box-sizing: border-box;
     height: 440px;
-    background: grey;
     padding-left: 90px;
     padding-right: 80px;
     border-radius: 20px;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
 }
 .notbackground {
     padding-left: 90px;
