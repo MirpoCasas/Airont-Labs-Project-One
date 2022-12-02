@@ -289,41 +289,62 @@ nav > input {
     margin: 50px;
 }
 
-.cards > h2 {
+.gradient > h2 {
     font-weight: 700;
     font-size: 24px;
 }
 
-.cards > div > p {
+.gradient > p {
     font-weight: 400;
     font-size: 12px;
 }
 
 .card1,
 .card2,
-.card3{
+.card3 {
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
+    overflow: hidden;
 }
 
-.cardgradient{
+.cardItem {
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    box-sizing: border-box;
+}
+
+.gradient {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     justify-content: flex-end;
-    box-sizing: border-box;
-    padding: 30px;
+    padding: 20px 30px;
     width: 100%;
     height: 100%;
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+    box-sizing: border-box;
 }
 
-.card1:hover,
-.card2:hover,
-.card3:hover{
-    background: linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);;
-    
+.watchcont {
+    flex-grow: 1;
+    display: fles;
+    opacity: 1;
+    transition: 0.5s;
+}
+
+.watchcont h3 {
+    margin: 0;
+}
+
+.backgroundpic {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    z-index: -1;
 }
 
 .vertical.card1 {
@@ -352,7 +373,8 @@ nav > input {
     justify-content: center;
 }
 
-.loader.vertical {
+.loader.vertical,
+.loader {
     display: grid;
     grid-template-columns: 320px 62px 320px 62px 320px;
     grid-template-rows: 440px;
@@ -361,16 +383,51 @@ nav > input {
     margin: 50px;
 }
 
-.loader.horizontal{
+@keyframes shine {
+    to {
+        background-position: 100% 0, 0 0;
+    }
+}
+
+.loader.horizontal {
     width: 1220px;
     height: 439px;
-    background-color: grey;
+    display: block;
+    background: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0),
+            rgba(255, 255, 255, 0.5) 50%,
+            rgba(255, 255, 255, 0) 80%
+        ),
+        lightgray;
+    background-repeat: repeat-y;
+    background-size: 50px 500px;
+    background-position: 0 0;
+    animation: shine 2s infinite;
     margin: 25px 0px;
 }
 
-.loader div {
-    background-color: grey;
+.loader.vertical div {
+    display: block;
+    background: linear-gradient(
+            to right,
+            rgba(255, 255, 255, 0),
+            rgba(255, 255, 255, 0.5) 50%,
+            rgba(255, 255, 255, 0) 80%
+        ),
+        lightgray;
+    background-repeat: repeat-y;
+    background-size: 50px 500px;
+    background-position: 0 0;
+    animation: shine 1s infinite;
 }
+
+@keyframes shine {
+    to {
+        background-position: 100% 0;
+    }
+}
+
 .loader__1 {
     grid-area: 1 / 1 / 2 / 2;
 }
@@ -399,18 +456,22 @@ nav > input {
         padding: 0px 15px;
     }
 
-    .cards > div > h2 {
+    .gradient > h2 {
         font-size: 20px;
     }
 
-    .cards > div > p {
+    .gradient > p {
         font-size: 10px;
     }
 
-    .card1,
-    .card2,
-    .card3 {
-        padding: 20px;
+    .backgroundpic.vertical {
+        width: 225px;
+        height: 309px;
+    }
+
+    .backgroundpic.horizontal {
+        width: 100%;
+        height: 100%;
     }
 
     .cards.vertical {
@@ -419,7 +480,7 @@ nav > input {
         margin: 10px 0px;
     }
 
-    .cards.horizontal{
+    .cards.horizontal {
         display: grid;
         grid-template-columns: 719px;
         grid-template-rows: 310px 35px 310px 35px 310px;
@@ -433,13 +494,14 @@ nav > input {
         width: 735px;
     }
 
-    .loader.vertical{
+    .loader.vertical,
+    .loader {
         grid-template-columns: 225px 30px 225px 30px 225px;
         grid-template-rows: 309px;
         margin: 10px 0px;
     }
 
-    .loader.horizontal{
+    .loader.horizontal {
         width: 720px;
         height: 310px;
     }
@@ -496,15 +558,15 @@ nav > input {
         display: none;
     }
 
-    .cards > div > h2 {
+    .gradient > h2 {
         font-size: 36px;
     }
-    .cards > div > p {
+    .gradient > p {
         font-size: 16px;
     }
 
     .cards.vertical,
-    .cards.horizontal  {
+    .cards.horizontal {
         display: grid;
         grid-template-columns: 450px;
         grid-template-rows: 618px 50px 618px 50px 618px;
@@ -514,27 +576,42 @@ nav > input {
         height: auto;
     }
 
-    .vertical.card1, .horizontal.card1 {
+    .vertical.card1,
+    .horizontal.card1 {
         grid-area: 1 / 1 / 2 / 2;
     }
-    .vertical.card2, .horizontal.card2 {
+    .vertical.card2,
+    .horizontal.card2 {
         grid-area: 3 / 1 / 4 / 2;
     }
-    .vertical.card3, .horizontal.card3{
+    .vertical.card3,
+    .horizontal.card3 {
         grid-area: 5 / 1 / 6 / 2;
     }
 
-    .loader.vertical{
+    .loader.vertical,
+    .loader {
         width: 449px;
         height: 618px;
-        background-color: grey;
+        display: block;
+        background: linear-gradient(
+                to right,
+                rgba(255, 255, 255, 0),
+                rgba(255, 255, 255, 0.5) 50%,
+                rgba(255, 255, 255, 0) 80%
+            ),
+            lightgray;
+        background-repeat: repeat-y;
+        background-size: 50px 500px;
+        background-position: 0 0;
+        animation: shine 2s infinite;
     }
 
-    .loaderItem{
+    .loader.vertical > div {
         display: none;
     }
 
-    .loader.horizontal{
+    .loader.horizontal {
         width: 450px;
         height: 618px;
     }

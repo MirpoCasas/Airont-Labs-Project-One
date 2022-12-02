@@ -10,6 +10,8 @@ let movies = [];
 let moviesToAdd = [];
 let layout = "vertical"
 
+
+
 let genres = [
     {
         id: 28,
@@ -105,15 +107,40 @@ function createCard(lay, title, desc, position, img_path) {
     const cardPlace = "card" + position;
     const newCard = document.createElement("div");
     let imgDone = getImg(img_path, "original");
-    newCard.style.backgroundImage = `url(${imgDone})`;
-    newCard.classList.add(cardPlace, lay);
+    newCard.classList.add(cardPlace, lay, "cardItem");
     newCard.innerHTML = `
-    <div class="cardgradient">
+    <div class="backgroundpic"></div>
+    <div class="gradient">
+    <div class="watchcont">
+    <h3>WATCH</h3>
+    </div>
     <h2 id="_title">${title}</h2>
     <p id="${cardPlace}_desc">${desc}</span>
     </div>
     `;
 
+    let backgroundpic = newCard.firstElementChild
+    console.log(backgroundpic)
+    backgroundpic.style.backgroundImage = `url("${imgDone}")`;
+    let gradient = backgroundpic.nextElementSibling
+    let watchcont = gradient.firstElementChild
+
+    gradient.style.background = "linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%)"
+    watchcont.style.opacity = 0
+    
+    newCard.addEventListener("mouseenter", function () {
+        gradient.style.background = "linear-gradient(180deg, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%)"
+        watchcont.style.opacity = 1
+        backgroundpic.style.transition = ("0.5s")
+        backgroundpic.style.transform = ("scale(1.2)")
+    });
+    newCard.addEventListener("mouseleave", function () {
+        gradient.style.background = "linear-gradient(180deg, rgba(0, 0, 0, 0) 0%, #000000 100%)"
+        watchcont.style.opacity = 0
+        backgroundpic.style.transition = ("0.5s")
+        backgroundpic.style.transform = ("scale(1)")
+    });
+    
     return newCard;
 }
 //returns genres from ids
@@ -235,20 +262,34 @@ async function createPage() {
 
     createList(movies)
 
+    //change to horizontal layout
     menu1.addEventListener("click", function () {
+        // set new layout
         layout = "horizontal"
-        let cards = document.querySelectorAll(".card1,.card2,.card3")
         
+        //get all cards and change class
+        let cards = document.querySelectorAll(".card1,.card2,.card3")
         cards.forEach(card => {
             card.classList.remove("vertical")    
             card.classList.add("horizontal")    
         });
 
+        //gets background pics and changes classes
+        let backgrounds = document.querySelectorAll(".backgroundpic")
+        backgrounds.forEach(element => {
+            element.classList.remove("vertical")    
+            element.classList.add("horizontal")
+        });
+
+
+        //gets all grids and changes classes
         let conts = document.querySelectorAll(".cards")
         conts.forEach(array => {
             array.classList.remove("vertical")
             array.classList.add("horizontal")
         });
+        
+        //gets skeleton loader and changes classes
         let loader = document.querySelector(".loader");
         let loaderItems = document.querySelectorAll(".loaderItem");
         loader.classList.remove("vertical");
@@ -259,20 +300,34 @@ async function createPage() {
             item.classList.add("horizontal")
         });
     });
+
+    //change to vertical layout
     menu3.addEventListener("click", function () {
+        // set new layout
         layout = "vertical"
+
+        //get all cards and change class
         let cards = document.querySelectorAll(".card1,.card2,.card3")
         cards.forEach(card => {
             card.classList.remove("horizontal")    
             card.classList.add("vertical")    
         });
+
+        //gets background pics and changes classes
+        let backgrounds = document.querySelectorAll(".backgroundpic")
+        backgrounds.forEach(element => {
+            element.classList.remove("horizontal")    
+            element.classList.add("vertical")
+        });
         
+        //gets all grids and changes classes
         let conts = document.querySelectorAll(".cards")
         conts.forEach(array => {
             array.classList.remove("horizontal")
             array.classList.add("vertical")
         });
-
+        
+        //gets skeleton loader and changes classes
         let loader = document.querySelector(".loader");
         let loaderItems = document.querySelectorAll(".loaderItem");
         loader.classList.remove("horizontal");
@@ -283,9 +338,12 @@ async function createPage() {
             item.classList.add("vertical")
         });
     });
+
+
 }
 
 window.onload = () => {
+    document.querySelector(".loader").classList.add(layout)
     createPage();
     console.log(moviesToAdd);
 };
