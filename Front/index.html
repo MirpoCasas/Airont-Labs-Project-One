@@ -19,13 +19,34 @@
       <p class="movfin">MOVIE<span>finder</span></p>
       <div class="searchbar">
         <img src="./src/lookingglass.svg" alt="looking glass" />
-        <input type="search" placeholder="Search movies..." />
+        <input type="search" id="searchfield" placeholder="Search movies..." />
       </div>
       <div class="user-info">
         <p>Log Out</p>
         <img src="./src/Ellipse 2.svg" />
       </div>
     </nav>
+    <div class="searchResults">
+      <div class="result1 searchResults__Item">
+        <div class="searchResults__ItemDettails">
+          <div class="searchResults__ItemDettailCont">
+            <p>This is a Detail:</p>
+            <p>5/5</p>
+          </div>
+          <div class="searchResults__ItemDettailCont">
+            <p>This is a Detail:</p>
+            <p>5/5</p>
+          </div>
+          <div class="searchResults__ItemDettailCont">
+            <p>This is a Detail:</p>
+            <p>5/5</p>
+          </div>
+        </div>
+        <div class="searchResults__ItemDescritption">
+          <p>Unlucky assassin Ladybug is determined to do his job peacefully after one too many gigs gone off the rails. Fate, however, may have other plans, as Ladybug's latest mission puts him on a collision course with lethal adversaries from around the globe—all with connected, yet conflicting, objectives—on the world's fastest train</p>
+        </div>
+      </div>
+    </div>
     <div class="preview" id="frontpreview">
       <div id="frontcont">
         
@@ -64,24 +85,26 @@
       <div class="modal__bottom">
         <p class="modal__desc"></p>
         <div class="modal__latter">
-          <div class="modal__details">
-            <div class="modal__detail">
-              <h3>Release Date:</h3>
-              <p id="modal_releasedate"></p>
+          <div class="modal__details_cont">
+            <div class="modal__details">
+              <div class="modal__detail">
+                <h3>Release Date:</h3>
+                <p id="modal_releasedate"></p>
+              </div>
+              <div class="modal__detail">
+                <h3>Genre:</h3>
+                <p id="modal_genres"></p>
+              </div>
             </div>
-            <div class="modal__detail">
-              <h3>Genre:</h3>
-              <p id="modal_genres"></p>
-            </div>
-          </div>
-          <div class="modal__details">
-            <div class="modal__detail">
-              <h3>Original Language:</h3>
-              <p id="modal_language"></p>
-            </div>
-            <div class="modal__detail">
-              <h3>Popularity:</h3>
-              <p id="modal_popularity"></p>
+            <div class="modal__details">
+              <div class="modal__detail">
+                <h3>Original Language:</h3>
+                <p id="modal_language"></p>
+              </div>
+              <div class="modal__detail">
+                <h3>Popularity:</h3>
+                <p id="modal_popularity"></p>
+              </div>
             </div>
           </div>
           <div class="modal__suggestions">

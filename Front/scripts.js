@@ -14,6 +14,19 @@ let genres = [];
 let layout = "vertical";
 const IMG_URL = "https://image.tmdb.org/t/p/";
 
+async function search(searchValue) {
+    const requestOptions = {
+        method: "GET",
+        redirect: "follow",
+    };
+
+    const searchMovies = await fetch(
+        `https://api.themoviedb.org/3/search/movie?api_key=47521ec4cb0fc520db13de6730790654&language=en-US&page=1&include_adult=false&query=${searchValue}`,
+        requestOptions
+    );
+    const resultsJson = await searchMovies.json();
+    return resultsJson.results;
+}
 
 async function getVideos(movie) {
     const requestOptions = {
@@ -27,7 +40,7 @@ async function getVideos(movie) {
         requestOptions
     );
     const videosJson = await videosData.json();
-    
+
     const videosArr = videosJson.results;
     console.log(videosArr);
     let videoKey = "";
@@ -43,23 +56,25 @@ async function getVideos(movie) {
 
     console.log(videoKey);
     let trailer = document.querySelector(".trailer");
-    trailer.innerHTML = ""
+    trailer.innerHTML = "";
     let frame = document.createElement("iframe");
-    let youtubeURL = "https://www.youtube.com/embed/"
-    frame.src = youtubeURL + videoKey
-    trailer.append(frame)
-    trailer.style.transition = "1s"
-    trailer.style.left = "43%"
-
+    let youtubeURL = "https://www.youtube.com/embed/";
+    frame.src = youtubeURL + videoKey;
+    trailer.append(frame);
+    trailer.style.transition = "1s";
+    trailer.style.left = "43%";
 }
 
 async function fetchLang() {
     const requestOptions = {
-        method: 'GET',
-        redirect: 'follow'
-      };
-      
-    const langData = await fetch("https://api.themoviedb.org/3/configuration/languages?api_key=47521ec4cb0fc520db13de6730790654", requestOptions)
+        method: "GET",
+        redirect: "follow",
+    };
+
+    const langData = await fetch(
+        "https://api.themoviedb.org/3/configuration/languages?api_key=47521ec4cb0fc520db13de6730790654",
+        requestOptions
+    );
     const langJson = langData.json();
     return langJson;
 }
@@ -237,14 +252,17 @@ async function setModal(movie) {
     const close = document.querySelector("#modal__close");
     const button = document.querySelector(".modal__buttoncont");
     const buttontext = document.createElement("button");
-    buttontext.classList = "modal__button_in";
-    buttontext.innerHTML = "Play Trailer"
-    console.log(button)
-    
-    button.append(buttontext)
-    
+    const body = document.querySelector("body");
 
-    let trailerBool = false
+    body.style.overflow = "hidden";
+
+    buttontext.classList = "modal__button_in";
+    buttontext.innerHTML = "Play Trailer";
+    console.log(button);
+
+    button.append(buttontext);
+
+    let trailerBool = false;
 
     // give trailer button functionality
     buttontext.addEventListener("click", function () {
@@ -257,49 +275,53 @@ async function setModal(movie) {
         } else {
             trailerBool = false;
             console.log("hide and clean");
-            buttontext.textContent = "Play Trailer"
-            trailer.style.transition = "1s"
+            buttontext.textContent = "Play Trailer";
+            trailer.style.transition = "1s";
             trailer.style.left = "543%";
-            trailer.innerHTML = ""
+            trailer.innerHTML = "";
         }
-    })
+    });
 
     modaltitle.textContent = movie.title;
     modaldesc.textContent = movie.overview;
-    
+
     //add background validation
     let imgModal = getImg(movie.backdrop_path, "original");
-    
+
     let genres = await giveGenres(movie.genre_ids);
     modalgenres.textContent = genres;
     modalrelease.textContent = movie.release_date;
-    
+
     // add language getter
-    let lang = ""
-    
+    let lang = "";
+
     modallanguage.textContent = movie.original_language;
-    
-    modalpopularity.textContent = `${(movie.vote_average*0.5).toFixed(2)} / 5`;
+
+    modalpopularity.textContent = `${(movie.vote_average * 0.5).toFixed(
+        2
+    )} / 5`;
     modalMain.style.display = "flex";
     ofuscator.style.display = "block";
     background.style.backgroundImage = `linear-gradient(359.32deg, #111111 0.53%, rgba(17, 17, 17, 0) 114.52%),url("${imgModal}")`;
-    
+
     // click on background closes modal
     ofuscator.addEventListener("click", function () {
-        trailer.innerHTML = ""
-        button.innerHTML = ""
-        trailer.style.left = "543%"
+        trailer.innerHTML = "";
+        button.innerHTML = "";
+        trailer.style.left = "543%";
         modalMain.style.display = "none";
         ofuscator.style.display = "none";
+        body.style.overflow = "auto";
     });
 
     // click on cross closes modal
     close.addEventListener("click", function () {
-        trailer.innerHTML = ""
-        button.innerHTML = ""
-        trailer.style.left = "543%"
+        trailer.innerHTML = "";
+        button.innerHTML = "";
+        trailer.style.left = "543%";
         modalMain.style.display = "none";
         ofuscator.style.display = "none";
+        body.style.overflow = "auto";
     });
 
     let recomMovies = await getRecommended(movie.id);
@@ -400,37 +422,38 @@ async function setMain(mainMovie) {
 
 //populates the list
 function createList(movieArr) {
-    console.log("creating list")
-    console.log(moviesToAdd)
+    console.log("creating list. moviesToAdd:");
+    console.log(moviesToAdd);
 
-    moviesToAdd.forEach(element => {
-        movieArr.unshift(element)
+    moviesToAdd.forEach((element) => {
+        movieArr.unshift(element);
     });
-    console.log(movieArr)
+    console.log("movieArr");
+    console.log(movieArr);
 
-    moviesToAdd = []
+    moviesToAdd = [];
 
     const recom = document.getElementById("recom");
-    
+
     // takes out exceding movies for next call
     let leftover = movieArr.length % 3;
-    console.log("leftover")
-    console.log(leftover)
+    console.log("movie leftover");
+    console.log(leftover);
     if (leftover > 0) {
-        let leftmovies = movieArr.splice(-leftover)
-        console.log("leftmovies")
-        console.log(leftmovies)
-        leftmovies.forEach(element => {
+        let leftmovies = movieArr.splice(-leftover);
+        console.log("leftmovies");
+        console.log(leftmovies);
+        leftmovies.forEach((element) => {
             moviesToAdd.push(element);
-        })
-        
-        console.log("moviesToAdd")
-        console.log(moviesToAdd)
+        });
+
+        console.log("moviesToAdd");
+        console.log(moviesToAdd);
     }
 
     // for every 3 entries, create a grid
     for (let i = 0; i < movieArr.length; i += 3) {
-        console.log(i)
+        console.log(i);
         console.log("creating a grid");
         let pos = 1;
         let plusGrid = document.createElement("div");
@@ -453,7 +476,7 @@ function createList(movieArr) {
         }
         // add grid to list
         console.log("appending plusGrid");
-        console.log(plusGrid)
+        console.log(plusGrid);
         recom.append(plusGrid);
     }
 }
@@ -467,8 +490,6 @@ async function createPage() {
 
     const movieToMain = movies.shift();
     setMain(movieToMain);
-
-    
 
     //change to horizontal layout
     menu1.addEventListener("click", function () {
@@ -547,27 +568,51 @@ async function createPage() {
     });
 }
 
+function debounce(func, timeout = 1000) {
+    let timer;
+    return (...args) => {
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+            func(...args);
+        }, timeout);
+    };
+}
+
+const debounceLog = debounce(text => {
+    console.log(text)
+    getSearchResults(text)
+})
+
+async function getSearchResults(querry) {
+
+    const results = await search(querry);
+    console.log(results)
+
+}
+
 window.onload = async () => {
     await createPage();
     createList(movies);
-    
 
-    const skeleton = document.querySelector(".loadercont")
-    const observer = new IntersectionObserver(
-        async (entries) => {
-            console.log(entries)
-            let isvisible = entries[0].isIntersecting
-            console.log(isvisible)
-            if (isvisible) {
-                fetchPage++
-                console.log(fetchPage)
-                const data = await getMoviesData(fetchPage);
-                const newMovies = data.results
-                console.log(newMovies)
-                createList(newMovies)
-            }
+    const skeleton = document.querySelector(".loadercont");
+    const observer = new IntersectionObserver(async (entries) => {
+        console.log(entries);
+        let isvisible = entries[0].isIntersecting;
+        console.log(isvisible);
+        if (isvisible) {
+            fetchPage++;
+            console.log(fetchPage);
+            const data = await getMoviesData(fetchPage);
+            const newMovies = data.results;
+            console.log(newMovies);
+            createList(newMovies);
         }
-    )
-    
-    observer.observe(skeleton)
+    });
+
+    observer.observe(skeleton);
+
+    const searchbar = document.querySelector("#searchfield");
+    searchbar.addEventListener("keyup", (e) => {  
+        debounceLog(e.target.value)
+    });
 };
