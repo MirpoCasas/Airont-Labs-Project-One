@@ -42,19 +42,19 @@ async function getVideos(movie) {
     const videosJson = await videosData.json();
 
     const videosArr = videosJson.results;
-    console.log(videosArr);
+    ;
     let videoKey = "";
 
     for (i = videosArr.length - 1; i >= 0; i--) {
-        console.log(i);
+        
         if (videosJson.results[i].type === "Trailer") {
-            console.log(videosJson.results[i]);
+            
             videoKey = videosJson.results[i].key;
             break;
         }
     }
 
-    console.log(videoKey);
+    
     let trailer = document.querySelector(".trailer");
     trailer.innerHTML = "";
     let frame = document.createElement("iframe");
@@ -97,9 +97,12 @@ async function fetchGenres() {
 
 //returns genres from ids
 async function giveGenres(genrelist) {
+
+    let idArr = genres
+
     res = [];
 
-    genres.forEach((element) => {
+    idArr.forEach((element) => {
         genrelist.forEach((genre_id) => {
             if (element.id === genre_id) {
                 res.push(element.name);
@@ -107,7 +110,9 @@ async function giveGenres(genrelist) {
         });
     });
 
-    return res.join(", ");
+    let endVar = res.join(", ")
+    
+    return endVar;
 }
 
 //fetch to get movie data. returns JSON.
@@ -169,9 +174,9 @@ function getImg(source, size) {
 }
 
 //shroten msg for card
-function abridge(message) {
-    if (message.length > 84) {
-        return message.slice(0, 150) + " ...";
+function abridge(message, length) {
+    if (message.length > length) {
+        return message.slice(0, length) + " ...";
     } else {
         return message;
     }
@@ -188,7 +193,7 @@ function createCard(lay, movie, position) {
         img_path = movie.poster_path;
     }
 
-    desc = abridge(desc);
+    desc = abridge(desc,150);
     const cardPlace = "card" + position;
     const newCard = document.createElement("div");
     let imgDone = getImg(img_path, "original");
@@ -239,6 +244,8 @@ function createCard(lay, movie, position) {
 
 // populates the modal
 async function setModal(movie) {
+    console.log("calling set modal")
+
     const modalMain = document.querySelector(".modal");
     const background = document.querySelector(".modal__top");
     const modaltitle = document.querySelector(".modal__title");
@@ -258,7 +265,7 @@ async function setModal(movie) {
 
     buttontext.classList = "modal__button_in";
     buttontext.innerHTML = "Play Trailer";
-    console.log(button);
+    
 
     button.append(buttontext);
 
@@ -267,14 +274,13 @@ async function setModal(movie) {
     // give trailer button functionality
     buttontext.addEventListener("click", function () {
         if (trailerBool === false) {
-            console.log("getting trailer");
-            console.log("getting trailer");
+            
             trailerBool = true;
             buttontext.textContent = "Hide Trailer";
             getVideos(movie);
         } else {
             trailerBool = false;
-            console.log("hide and clean");
+            
             buttontext.textContent = "Play Trailer";
             trailer.style.transition = "1s";
             trailer.style.left = "543%";
@@ -331,8 +337,7 @@ async function setModal(movie) {
 
     for (let i = 0; i < recomMovies.length; i++) {
         if (recomMovies[i].title === movie.title) {
-            console.log("removed same");
-            console.log(recomMovies[i]);
+            
             recomMovies.splice(i, 1);
         }
     }
@@ -392,7 +397,7 @@ async function setModal(movie) {
 
 //populates the title card
 async function setMain(mainMovie) {
-    console.log(mainMovie);
+    
     let title = mainMovie.title;
     let desc = mainMovie.overview;
     const genresNames = await giveGenres(mainMovie.genre_ids);
@@ -422,14 +427,12 @@ async function setMain(mainMovie) {
 
 //populates the list
 function createList(movieArr) {
-    console.log("creating list. moviesToAdd:");
-    console.log(moviesToAdd);
+    
 
     moviesToAdd.forEach((element) => {
         movieArr.unshift(element);
     });
-    console.log("movieArr");
-    console.log(movieArr);
+    
 
     moviesToAdd = [];
 
@@ -437,24 +440,20 @@ function createList(movieArr) {
 
     // takes out exceding movies for next call
     let leftover = movieArr.length % 3;
-    console.log("movie leftover");
-    console.log(leftover);
+    
     if (leftover > 0) {
         let leftmovies = movieArr.splice(-leftover);
-        console.log("leftmovies");
-        console.log(leftmovies);
+        
         leftmovies.forEach((element) => {
             moviesToAdd.push(element);
         });
 
-        console.log("moviesToAdd");
-        console.log(moviesToAdd);
+        
     }
 
     // for every 3 entries, create a grid
     for (let i = 0; i < movieArr.length; i += 3) {
-        console.log(i);
-        console.log("creating a grid");
+        
         let pos = 1;
         let plusGrid = document.createElement("div");
         plusGrid.classList.add("cards", layout);
@@ -475,8 +474,7 @@ function createList(movieArr) {
             fakei += 1;
         }
         // add grid to list
-        console.log("appending plusGrid");
-        console.log(plusGrid);
+        
         recom.append(plusGrid);
     }
 }
@@ -568,6 +566,7 @@ async function createPage() {
     });
 }
 
+// basic debounce function
 function debounce(func, timeout = 1000) {
     let timer;
     return (...args) => {
@@ -578,16 +577,114 @@ function debounce(func, timeout = 1000) {
     };
 }
 
-const debounceLog = debounce(text => {
-    console.log(text)
+// manages the break between inputs and searches
+const debounceSearch = debounce(text => {
+    
     getSearchResults(text)
 })
 
+function renderResults(results,starting = 0){
+
+    if (results[starting] === undefined){
+        noResult(1)
+    }else{
+        placeSearchMovie(results[starting],1)
+    }
+    
+    if (results[starting+1] === undefined) {
+        noResult(2)
+    }else{
+        placeSearchMovie(results[starting+1],2)
+    }
+    
+    if (results[starting+2] === undefined) {
+        noResult(3)
+    }else{
+        placeSearchMovie(results[starting+2],3)
+    }
+    
+    if (results[starting+3] === undefined) {
+        noResult(4)
+    }else{
+        placeSearchMovie(results[starting+3], 4)
+    }
+}
+
+//manages the search results and populates them.
 async function getSearchResults(querry) {
 
-    const results = await search(querry);
-    console.log(results)
+    const searchDropDown = document.querySelector(".searchDropdown")
+    const closeButton = document.querySelector(".searchButton2")
+    const upButton = document.querySelector(".searchButton1")
+    const downButon = document.querySelector(".searchButton3")
 
+    let pageByFour = 0
+    
+    // if querry emptied, hide dropdown
+    if (querry.length === 0) {
+        searchDropDown.style.display = "none"
+    } else {
+        const results = await search(querry);
+        
+    
+        renderResults(results)
+        searchDropDown.style.display = "flex"
+    }
+
+    closeButton.addEventListener("click", function () {
+        searchDropDown.style.display = "none"
+        document.querySelector("#searchfield").value = ""
+    });
+
+    
+}
+
+//returns an empty search result
+function noResult(position){
+    const searchDataCont = document.querySelector(`.dataCont${position}`)
+    const searchImgCont = document.querySelector(`.searchImg${position}`)
+    searchImgCont.style.backgroundImage = `url("")`
+    searchDataCont.innerHTML = `
+    <div class="searchResults__ItemDettails">
+    <div class="searchResults__ItemDettailCont">
+    <h2 class="Search_title">No result</h2>
+    </div>
+    `
+}
+
+//populates one of 4 search results
+async function placeSearchMovie(movie, position) {
+    const searchImgCont = document.querySelector(`.searchImg${position}`)
+    const searchDataCont = document.querySelector(`.dataCont${position}`)
+    const fullresult = document.querySelector(`.result${position}`)
+    let imgURL = getImg(movie.backdrop_path, "w500")
+
+    searchImgCont.style.backgroundImage = `url("${imgURL}")`
+
+    
+    fullresult.removeEventListener('click', function(e) {setModal()}, true);
+    fullresult.addEventListener('click', function(e) {setModal(movie)}, true);
+
+    searchDataCont.innerHTML = `
+    <div class="searchResults__ItemDettails">
+    <div class="searchResults__ItemDettailCont">
+        <h2 class="search_title">${movie.title}</h2>
+    </div>
+    <div class="searchResults__ItemDettailCont">
+        <p class="search_subtitle">Genres:</p>
+        <p>${await giveGenres(movie.genre_ids)}</p>
+    </div>
+    <div class="searchResults__ItemDettailCont">
+        <p class="search_subtitle">Rating:</p>
+        <p>${movie.vote_average}</p>
+    </div>
+    </div>
+    <div class="searchResults__ItemDescritption">
+        <p>
+            ${abridge(movie.overview,500)}
+        </p>
+    </div>
+    `
 }
 
 window.onload = async () => {
@@ -596,15 +693,15 @@ window.onload = async () => {
 
     const skeleton = document.querySelector(".loadercont");
     const observer = new IntersectionObserver(async (entries) => {
-        console.log(entries);
+        
         let isvisible = entries[0].isIntersecting;
-        console.log(isvisible);
+        
         if (isvisible) {
             fetchPage++;
-            console.log(fetchPage);
+            
             const data = await getMoviesData(fetchPage);
             const newMovies = data.results;
-            console.log(newMovies);
+            
             createList(newMovies);
         }
     });
@@ -613,6 +710,6 @@ window.onload = async () => {
 
     const searchbar = document.querySelector("#searchfield");
     searchbar.addEventListener("keyup", (e) => {  
-        debounceLog(e.target.value)
+        debounceSearch(e.target.value)
     });
 };
