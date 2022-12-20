@@ -4,7 +4,7 @@ if (authKey === null) {
     // window.location.href = "../Login/index.html";
 }
 
-/* API key = 47521ec4cb0fc520db13de6730790654 */
+let lastSearches = [];
 let fetchPage = 1;
 let movies = [];
 let moviesToAdd = [];
@@ -13,6 +13,16 @@ let recomArr = [];
 let genres = [];
 let layout = "vertical";
 const IMG_URL = "https://image.tmdb.org/t/p/";
+
+function getLastSearches() {
+    let previous = JSON.parse(sessionStorage.getItem("searches"));
+    if (!previous === null) {
+        console.log("no searches")
+    } else {
+        lastSearches = previous;
+    }
+    console.log(lastSearches);
+}
 
 async function search(searchValue) {
     const requestOptions = {
@@ -42,19 +52,15 @@ async function getVideos(movie) {
     const videosJson = await videosData.json();
 
     const videosArr = videosJson.results;
-    ;
     let videoKey = "";
 
     for (i = videosArr.length - 1; i >= 0; i--) {
-        
         if (videosJson.results[i].type === "Trailer") {
-            
             videoKey = videosJson.results[i].key;
             break;
         }
     }
 
-    
     let trailer = document.querySelector(".trailer");
     trailer.innerHTML = "";
     let frame = document.createElement("iframe");
@@ -97,8 +103,7 @@ async function fetchGenres() {
 
 //returns genres from ids
 async function giveGenres(genrelist) {
-
-    let idArr = genres
+    let idArr = genres;
 
     res = [];
 
@@ -110,8 +115,8 @@ async function giveGenres(genrelist) {
         });
     });
 
-    let endVar = res.join(", ")
-    
+    let endVar = res.join(", ");
+
     return endVar;
 }
 
@@ -173,6 +178,20 @@ function getImg(source, size) {
     return final;
 }
 
+function setStars(score) {
+    if (score < 2) {
+        return "./src/1star.svg";
+    } else if (score < 4) {
+        return "./src/2star.svg";
+    } else if (score < 6) {
+        return "./src/3stars.svg";
+    } else if (score < 8) {
+        return "./src/4stars.svg";
+    } else {
+        return "./src/5stars.svg";
+    }
+}
+
 //shroten msg for card
 function abridge(message, length) {
     if (message.length > length) {
@@ -193,9 +212,11 @@ function createCard(lay, movie, position) {
         img_path = movie.poster_path;
     }
 
-    desc = abridge(desc,150);
+    desc = abridge(desc, 150);
     const cardPlace = "card" + position;
     const newCard = document.createElement("div");
+    let starsSVG = setStars(movie.vote_average);
+
     let imgDone = getImg(img_path, "original");
     newCard.classList.add(cardPlace, lay, "cardItem");
     newCard.innerHTML = `
@@ -205,6 +226,7 @@ function createCard(lay, movie, position) {
     <h3>WATCH</h3>
     </div>
     <h2 id="_title">${title}</h2>
+    <img alt="stars rating" class="starsImg" src="${starsSVG}"></img>
     <p id="${cardPlace}_desc">${desc}</span>
     </div>
     `;
@@ -244,8 +266,6 @@ function createCard(lay, movie, position) {
 
 // populates the modal
 async function setModal(movie) {
-    console.log("calling set modal")
-
     const modalMain = document.querySelector(".modal");
     const background = document.querySelector(".modal__top");
     const modaltitle = document.querySelector(".modal__title");
@@ -265,7 +285,6 @@ async function setModal(movie) {
 
     buttontext.classList = "modal__button_in";
     buttontext.innerHTML = "Play Trailer";
-    
 
     button.append(buttontext);
 
@@ -274,13 +293,12 @@ async function setModal(movie) {
     // give trailer button functionality
     buttontext.addEventListener("click", function () {
         if (trailerBool === false) {
-            
             trailerBool = true;
             buttontext.textContent = "Hide Trailer";
             getVideos(movie);
         } else {
             trailerBool = false;
-            
+
             buttontext.textContent = "Play Trailer";
             trailer.style.transition = "1s";
             trailer.style.left = "543%";
@@ -337,7 +355,6 @@ async function setModal(movie) {
 
     for (let i = 0; i < recomMovies.length; i++) {
         if (recomMovies[i].title === movie.title) {
-            
             recomMovies.splice(i, 1);
         }
     }
@@ -397,14 +414,15 @@ async function setModal(movie) {
 
 //populates the title card
 async function setMain(mainMovie) {
-    
     let title = mainMovie.title;
     let desc = mainMovie.overview;
     const genresNames = await giveGenres(mainMovie.genre_ids);
     const cont = document.getElementById("frontcont");
+    let starSVG = setStars(mainMovie.vote_averge);
     let newEl = document.createElement("div");
     newEl.innerHTML = `
     <p class="genre" id="preview_genre">${genresNames}</p>
+    <img src="${starSVG}" alt="stars rating" class="starsImgMain"></img>
     <h2 class="movietitle" id="preview_title">${title}</h2>
     <div class="descriptioncont">
     <p class="description" id="preview_desc">
@@ -427,12 +445,9 @@ async function setMain(mainMovie) {
 
 //populates the list
 function createList(movieArr) {
-    
-
     moviesToAdd.forEach((element) => {
         movieArr.unshift(element);
     });
-    
 
     moviesToAdd = [];
 
@@ -440,20 +455,17 @@ function createList(movieArr) {
 
     // takes out exceding movies for next call
     let leftover = movieArr.length % 3;
-    
+
     if (leftover > 0) {
         let leftmovies = movieArr.splice(-leftover);
-        
+
         leftmovies.forEach((element) => {
             moviesToAdd.push(element);
         });
-
-        
     }
 
     // for every 3 entries, create a grid
     for (let i = 0; i < movieArr.length; i += 3) {
-        
         let pos = 1;
         let plusGrid = document.createElement("div");
         plusGrid.classList.add("cards", layout);
@@ -474,7 +486,7 @@ function createList(movieArr) {
             fakei += 1;
         }
         // add grid to list
-        
+
         recom.append(plusGrid);
     }
 }
@@ -578,130 +590,185 @@ function debounce(func, timeout = 1000) {
 }
 
 // manages the break between inputs and searches
-const debounceSearch = debounce(text => {
-    
-    getSearchResults(text)
-})
+const debounceSearch = debounce((text) => {
+    lastSearches.unshift(text);
+    let lastSearchesJSON = JSON.stringify(lastSearches);
+    sessionStorage.setItem("searches", lastSearchesJSON);
 
-function renderResults(results,starting = 0){
+    renderSearches()
 
-    if (results[starting] === undefined){
-        noResult(1)
-    }else{
-        placeSearchMovie(results[starting],1)
+
+    getSearchResults(text);
+});
+
+function renderSearches() {
+    console.log("rendering searches");
+    let searchesCont = document.querySelector(".searchesCont");
+    let searchBar = document.querySelector("#searchfield")
+    searchesCont.innerHTML = '';
+
+    for (let i = 0; i < 3; i++){
+        if (lastSearches[i].length === 0) {
+            
+        } else {
+            console.log(lastSearches[i]);
+            let search = document.createElement("p")
+            search.textContent = lastSearches[i]
+
+            search.addEventListener("click", function () {
+                searchBar.value = lastSearches[i]
+                getSearchResults(lastSearches[i])
+            })
+            searchesCont.append(search)
+        }
     }
-    
-    if (results[starting+1] === undefined) {
-        noResult(2)
-    }else{
-        placeSearchMovie(results[starting+1],2)
+}
+
+
+function renderResults(results, starting = 0) {
+    const searchResults = document.querySelector(".searchResults");
+    searchResults.innerHTML = "";
+
+    if (results[starting] === undefined) {
+        noResult(1);
+    } else {
+        placeSearchMovie(results[starting], 1);
     }
-    
-    if (results[starting+2] === undefined) {
-        noResult(3)
-    }else{
-        placeSearchMovie(results[starting+2],3)
+
+    if (results[starting + 1] === undefined) {
+        noResult(2);
+    } else {
+        placeSearchMovie(results[starting + 1], 2);
     }
-    
-    if (results[starting+3] === undefined) {
-        noResult(4)
-    }else{
-        placeSearchMovie(results[starting+3], 4)
+
+    if (results[starting + 2] === undefined) {
+        noResult(3);
+    } else {
+        placeSearchMovie(results[starting + 2], 3);
+    }
+
+    if (results[starting + 3] === undefined) {
+        noResult(4);
+    } else {
+        placeSearchMovie(results[starting + 3], 4);
     }
 }
 
 //manages the search results and populates them.
 async function getSearchResults(querry) {
+    const searchDropDown = document.querySelector(".searchDropdown");
+    const closeButton = document.querySelector(".searchButton2");
+    const upButton = document.querySelector(".searchButton1");
+    const downButton = document.querySelector(".searchButton3");
 
-    const searchDropDown = document.querySelector(".searchDropdown")
-    const closeButton = document.querySelector(".searchButton2")
-    const upButton = document.querySelector(".searchButton1")
-    const downButon = document.querySelector(".searchButton3")
+    let pageByFour = 0;
+    let results;
 
-    let pageByFour = 0
-    
     // if querry emptied, hide dropdown
     if (querry.length === 0) {
-        searchDropDown.style.display = "none"
+        searchDropDown.style.display = "none";
     } else {
-        const results = await search(querry);
-        
-    
-        renderResults(results)
-        searchDropDown.style.display = "flex"
+        results = await search(querry);
+
+        renderResults(results);
+        searchDropDown.style.display = "flex";
     }
 
-    closeButton.addEventListener("click", function () {
-        searchDropDown.style.display = "none"
-        document.querySelector("#searchfield").value = ""
+    upButton.addEventListener("click", function () {
+        if (pageByFour > 0) {
+            pageByFour -= 4;
+
+            renderResults(results, pageByFour);
+        }
+    });
+    downButton.addEventListener("click", function () {
+        pageByFour += 4;
+
+        renderResults(results, pageByFour);
     });
 
-    
+    closeButton.addEventListener("click", function () {
+        searchDropDown.style.display = "none";
+        document.querySelector("#searchfield").value = "";
+    });
 }
 
 //returns an empty search result
-function noResult(position){
-    const searchDataCont = document.querySelector(`.dataCont${position}`)
-    const searchImgCont = document.querySelector(`.searchImg${position}`)
-    searchImgCont.style.backgroundImage = `url("")`
-    searchDataCont.innerHTML = `
-    <div class="searchResults__ItemDettails">
-    <div class="searchResults__ItemDettailCont">
-    <h2 class="Search_title">No result</h2>
+function noResult(position) {
+    const searchResults = document.querySelector(".searchResults");
+    let newResult = document.createElement("div");
+    newResult.classList.add(`result${position}`, "searchResults__Item");
+    newResult.innerHTML = `
+    <div class="searchResults__ItemImg searchImg${position}"></div>
+    <div class="searchResults__DataCont dataCont${position}">
+        <div class="searchResults__ItemDettails">
+            <div class="searchResults__ItemDettailCont">
+                <h2 class="search_title">No Result</h2>
+            </div>
+        </div>
     </div>
-    `
+    `;
+    searchResults.append(newResult);
 }
 
 //populates one of 4 search results
 async function placeSearchMovie(movie, position) {
-    const searchImgCont = document.querySelector(`.searchImg${position}`)
-    const searchDataCont = document.querySelector(`.dataCont${position}`)
-    const fullresult = document.querySelector(`.result${position}`)
-    let imgURL = getImg(movie.backdrop_path, "w500")
+    const searchResults = document.querySelector(".searchResults");
+    let newResult = document.createElement("div");
+    let imgURL = getImg(movie.backdrop_path, "w500");
 
-    searchImgCont.style.backgroundImage = `url("${imgURL}")`
+    newResult.classList.add(`result${position}`, "searchResults__Item");
 
-    
-    fullresult.removeEventListener('click', function(e) {setModal()}, true);
-    fullresult.addEventListener('click', function(e) {setModal(movie)}, true);
+    newResult.innerHTML = `
+    <div
+        class="searchResults__ItemImg searchImg${position}"
+        style="background-image: url(${imgURL})"
+    ></div>
+    <div class="searchResults__DataCont dataCont${position}">
+        <div class="searchResults__ItemDettails">
+            <div class="searchResults__ItemDettailCont">
+                <h2 class="search_title">${movie.title}</h2>
+            </div>
+            <div class="searchResults__ItemDettailCont">
+                <p class="search_subtitle">Genres:</p>
+                <p>${await giveGenres(movie.genre_ids)}</p>
+            </div>
+            <div class="searchResults__ItemDettailCont">
+                <p class="search_subtitle">Rating:</p>
+                <p>${movie.vote_average}</p>
+            </div>
+        </div>
+        <div class="searchResults__ItemDescritption">
+            <p>
+                ${abridge(movie.overview, 200)}
+            </p>
+        </div>
+    </div>
+    `;
 
-    searchDataCont.innerHTML = `
-    <div class="searchResults__ItemDettails">
-    <div class="searchResults__ItemDettailCont">
-        <h2 class="search_title">${movie.title}</h2>
-    </div>
-    <div class="searchResults__ItemDettailCont">
-        <p class="search_subtitle">Genres:</p>
-        <p>${await giveGenres(movie.genre_ids)}</p>
-    </div>
-    <div class="searchResults__ItemDettailCont">
-        <p class="search_subtitle">Rating:</p>
-        <p>${movie.vote_average}</p>
-    </div>
-    </div>
-    <div class="searchResults__ItemDescritption">
-        <p>
-            ${abridge(movie.overview,500)}
-        </p>
-    </div>
-    `
+    newResult.addEventListener("click", function () {
+        setModal(movie);
+    });
+
+    searchResults.append(newResult);
 }
 
 window.onload = async () => {
     await createPage();
     createList(movies);
+    getLastSearches();
+    renderSearches();
 
     const skeleton = document.querySelector(".loadercont");
     const observer = new IntersectionObserver(async (entries) => {
-        
         let isvisible = entries[0].isIntersecting;
-        
+
         if (isvisible) {
             fetchPage++;
-            
+
             const data = await getMoviesData(fetchPage);
             const newMovies = data.results;
-            
+
             createList(newMovies);
         }
     });
@@ -709,7 +776,7 @@ window.onload = async () => {
     observer.observe(skeleton);
 
     const searchbar = document.querySelector("#searchfield");
-    searchbar.addEventListener("keyup", (e) => {  
-        debounceSearch(e.target.value)
+    searchbar.addEventListener("keyup", (e) => {
+        debounceSearch(e.target.value);
     });
 };
