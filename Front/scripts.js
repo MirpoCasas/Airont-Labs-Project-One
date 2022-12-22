@@ -14,6 +14,8 @@ let moviesToAdd = [];
 let languages = [];
 let recomArr = [];
 let genres = [];
+let month = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"]
 let layout = "vertical";
 const IMG_URL = "https://image.tmdb.org/t/p/";
 
@@ -57,8 +59,12 @@ async function getVideos(movie) {
         redirect: "follow",
     };
     const movieId = movie.id;
-
+    
     try {
+        let trailer = document.querySelector(".trailer");
+        trailer.innerHTML = "";
+        let frame = document.createElement("iframe");
+        trailer.style.display = "flex"
         const videosData = await fetch(
             `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=47521ec4cb0fc520db13de6730790654&language=en-US`,
             requestOptions
@@ -75,14 +81,21 @@ async function getVideos(movie) {
             }
         }
 
-        let trailer = document.querySelector(".trailer");
-        trailer.innerHTML = "";
-        let frame = document.createElement("iframe");
+        
         let youtubeURL = "https://www.youtube.com/embed/";
         frame.src = youtubeURL + videoKey;
+        frame.allow = "fullscreen"
+        frame.frameBorder="0"
         trailer.append(frame);
-        trailer.style.transition = "1s";
-        trailer.style.left = "43%";
+        trailer.display = "flex"
+        trailer.style.transition = " left 1s";
+
+        let onDesktop = (window.innerWidth > 1220)
+        if (onDesktop) {
+            trailer.style.left = "calc(50vw - 50px)";
+        }else{
+            trailer.style.left = "0"
+        }
     } catch (error) {
         console.log(error);
     }
@@ -100,6 +113,7 @@ async function fetchLang() {
             requestOptions
         );
         const langJson = langData.json();
+        console.log(langJson)
         return langJson;
     } catch (error) {
         console.log(error)
@@ -171,7 +185,7 @@ async function setMovies() {
     const rawLang = await fetchLang();
 
     languages = await rawLang;
-
+    console.log(languages)  
     genres = await rawGenres.genres;
 
     movies = await rawMovies.results;
@@ -315,6 +329,9 @@ async function setModal(movie) {
 
     let trailerBool = false;
 
+    let onDesktop = (window.innerWidth > 1220)
+    console.log(onDesktop)
+
     // give trailer button functionality
     buttontext.addEventListener("click", function () {
         if (trailerBool === false) {
@@ -325,11 +342,26 @@ async function setModal(movie) {
             trailerBool = false;
 
             buttontext.textContent = "Play Trailer";
-            trailer.style.transition = "1s";
-            trailer.style.left = "543%";
-            trailer.innerHTML = "";
+            trailer.style.transition = "left 1s";
+            trailer.style.left = "143%";
+            setTimeout(() => {
+                trailer.innerHTML = ''
+                trailer.style.display = "none"
+            }, 1001);
         }
     });
+
+    trailer.addEventListener("click", function () {
+        trailerBool = false;
+
+            buttontext.textContent = "Play Trailer";
+            trailer.style.transition = "left 1s";
+            trailer.style.left = "143%";
+            setTimeout(() => {
+                trailer.innerHTML = ''
+                trailer.style.display = "none"
+            }, 1001);
+    })
 
     modaltitle.textContent = movie.title;
     modaldesc.textContent = movie.overview;
@@ -348,12 +380,30 @@ async function setModal(movie) {
 
     let genres = await giveGenres(movie.genre_ids);
     modalgenres.textContent = genres;
-    modalrelease.textContent = movie.release_date;
 
-    // add language getter
+    let date = movie.release_date.split("-")
+    console.log(date)
+    
+    
+    let monthNum = (Number(date[1]))-1
+    console.log(monthNum)
+
+    let refinedDate = date[2] + " " + month[monthNum] + " " + date[0]
+    
+    console.log(refinedDate)
+
+    modalrelease.textContent = refinedDate;
+
+    // Gets english name for language
     let lang = "";
 
-    modallanguage.textContent = movie.original_language;
+    languages.forEach(element => {
+        if (element.iso_639_1 === movie.original_language) {
+            lang = element.english_name
+        }
+    })
+
+    modallanguage.textContent = lang;
 
     modalpopularity.textContent = `${(movie.vote_average * 0.5).toFixed(
         2
@@ -369,6 +419,7 @@ async function setModal(movie) {
         trailer.style.left = "543%";
         modalMain.style.display = "none";
         ofuscator.style.display = "none";
+        trailer.style.display = "none";
         body.style.overflow = "auto";
     });
 
@@ -379,6 +430,7 @@ async function setModal(movie) {
         trailer.style.left = "543%";
         modalMain.style.display = "none";
         ofuscator.style.display = "none";
+        trailer.style.display = "none";
         body.style.overflow = "auto";
     });
 
