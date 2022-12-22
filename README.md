@@ -8,6 +8,8 @@ This project uses JSON server Auth for a mock up Backend to use Log in functions
 Only then, will login functions work.
 
 The test credentials that can be used are:
+
+
 User: test1@fakemail.com
 Pass: FakePass123.
 
