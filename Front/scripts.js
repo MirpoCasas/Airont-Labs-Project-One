@@ -1,12 +1,15 @@
-const authKey = localStorage.getItem("auth");
+const authKeyLocal = localStorage.getItem("auth");
+const authKeySession = sessionStorage.getItem("auth");
 
-if (authKey === null) {
-    // window.location.href = "../Login/index.html";
+//check if user is logged, if not return to Login
+if ((authKeyLocal === null) & (authKeySession === null)) {
+    window.location.href = "../Login/index.html";
 }
 
 let lastSearches = [];
 let fetchPage = 1;
 let movies = [];
+let results;
 let moviesToAdd = [];
 let languages = [];
 let recomArr = [];
@@ -14,30 +17,40 @@ let genres = [];
 let layout = "vertical";
 const IMG_URL = "https://image.tmdb.org/t/p/";
 
+//gets previous searches from the sessionStorage
 function getLastSearches() {
     let previous = JSON.parse(sessionStorage.getItem("searches"));
-    if (!previous === null) {
-        console.log("no searches")
+    if (previous === null) {
+        console.log("no searches");
     } else {
-        lastSearches = previous;
+        if (previous.length > 5) {
+            lastSearches = previous.slice(0, 4);
+        } else {
+            lastSearches = previous;
+        }
     }
     console.log(lastSearches);
 }
 
-async function search(searchValue) {
+//fetch search that takes in a query and a page
+async function search(searchValue, page = 1) {
     const requestOptions = {
         method: "GET",
         redirect: "follow",
     };
-
-    const searchMovies = await fetch(
-        `https://api.themoviedb.org/3/search/movie?api_key=47521ec4cb0fc520db13de6730790654&language=en-US&page=1&include_adult=false&query=${searchValue}`,
-        requestOptions
-    );
-    const resultsJson = await searchMovies.json();
-    return resultsJson.results;
+    try {
+        const searchMovies = await fetch(
+            `https://api.themoviedb.org/3/search/movie?api_key=47521ec4cb0fc520db13de6730790654&language=en-US&page=${page}&include_adult=false&query=${searchValue}`,
+            requestOptions
+        );
+        const resultsJson = await searchMovies.json();
+        return resultsJson.results;
+    } catch (error) {
+        console.log(error);
+    }
 }
 
+//fetch videos from movie and selects the trailer. No way to check if trailer available before rendering found but implementation would be apropiate.
 async function getVideos(movie) {
     const requestOptions = {
         method: "GET",
@@ -45,47 +58,55 @@ async function getVideos(movie) {
     };
     const movieId = movie.id;
 
-    const videosData = await fetch(
-        `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=47521ec4cb0fc520db13de6730790654&language=en-US`,
-        requestOptions
-    );
-    const videosJson = await videosData.json();
+    try {
+        const videosData = await fetch(
+            `https://api.themoviedb.org/3/movie/${movieId}/videos?api_key=47521ec4cb0fc520db13de6730790654&language=en-US`,
+            requestOptions
+        );
+        const videosJson = await videosData.json();
 
-    const videosArr = videosJson.results;
-    let videoKey = "";
+        const videosArr = videosJson.results;
+        let videoKey = "";
 
-    for (i = videosArr.length - 1; i >= 0; i--) {
-        if (videosJson.results[i].type === "Trailer") {
-            videoKey = videosJson.results[i].key;
-            break;
+        for (i = videosArr.length - 1; i >= 0; i--) {
+            if (videosJson.results[i].type === "Trailer") {
+                videoKey = videosJson.results[i].key;
+                break;
+            }
         }
-    }
 
-    let trailer = document.querySelector(".trailer");
-    trailer.innerHTML = "";
-    let frame = document.createElement("iframe");
-    let youtubeURL = "https://www.youtube.com/embed/";
-    frame.src = youtubeURL + videoKey;
-    trailer.append(frame);
-    trailer.style.transition = "1s";
-    trailer.style.left = "43%";
+        let trailer = document.querySelector(".trailer");
+        trailer.innerHTML = "";
+        let frame = document.createElement("iframe");
+        let youtubeURL = "https://www.youtube.com/embed/";
+        frame.src = youtubeURL + videoKey;
+        trailer.append(frame);
+        trailer.style.transition = "1s";
+        trailer.style.left = "43%";
+    } catch (error) {
+        console.log(error);
+    }
 }
 
+//fetch assigns possible languages to variable
 async function fetchLang() {
     const requestOptions = {
         method: "GET",
         redirect: "follow",
     };
-
-    const langData = await fetch(
-        "https://api.themoviedb.org/3/configuration/languages?api_key=47521ec4cb0fc520db13de6730790654",
-        requestOptions
-    );
-    const langJson = langData.json();
-    return langJson;
+    try {
+        const langData = await fetch(
+            "https://api.themoviedb.org/3/configuration/languages?api_key=47521ec4cb0fc520db13de6730790654",
+            requestOptions
+        );
+        const langJson = langData.json();
+        return langJson;
+    } catch (error) {
+        console.log(error)
+    }
 }
 
-// gets genre information
+//fetch gets genre information
 async function fetchGenres() {
     const requestOptions = {
         method: "GET",
@@ -96,9 +117,12 @@ async function fetchGenres() {
         "https://api.themoviedb.org/3/genre/movie/list?api_key=47521ec4cb0fc520db13de6730790654&language=en-US",
         requestOptions
     );
-    const gen = await genreData.json();
-
-    return gen;
+    try {
+        const gen = await genreData.json();
+        return gen;
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 //returns genres from ids
@@ -178,6 +202,7 @@ function getImg(source, size) {
     return final;
 }
 
+//returns the src for the apropiate star svg
 function setStars(score) {
     if (score < 2) {
         return "./src/1star.svg";
@@ -218,7 +243,7 @@ function createCard(lay, movie, position) {
     let starsSVG = setStars(movie.vote_average);
 
     let imgDone = getImg(img_path, "original");
-    newCard.classList.add(cardPlace, lay, "cardItem");
+    newCard.classList.add(cardPlace, lay, "cards__Item");
     newCard.innerHTML = `
     <div class="backgroundpic"></div>
     <div class="gradient">
@@ -283,7 +308,7 @@ async function setModal(movie) {
 
     body.style.overflow = "hidden";
 
-    buttontext.classList = "modal__button_in";
+    buttontext.classList = "modal__button_in btn";
     buttontext.innerHTML = "Play Trailer";
 
     button.append(buttontext);
@@ -309,8 +334,17 @@ async function setModal(movie) {
     modaltitle.textContent = movie.title;
     modaldesc.textContent = movie.overview;
 
-    //add background validation
-    let imgModal = getImg(movie.backdrop_path, "original");
+
+    //validate background and assign
+    let img
+
+    if (movie.backdrop_path === null) {
+        img = movie.poster_path
+    } else {
+        img = movie.backdrop_path
+    }
+    
+    let imgModal = getImg(img, "original");
 
     let genres = await giveGenres(movie.genre_ids);
     modalgenres.textContent = genres;
@@ -591,39 +625,39 @@ function debounce(func, timeout = 1000) {
 
 // manages the break between inputs and searches
 const debounceSearch = debounce((text) => {
-    lastSearches.unshift(text);
-    let lastSearchesJSON = JSON.stringify(lastSearches);
-    sessionStorage.setItem("searches", lastSearchesJSON);
+    if (text.length === 0) {
+    } else {
+        lastSearches.unshift(text);
+        let lastSearchesJSON = JSON.stringify(lastSearches);
+        sessionStorage.setItem("searches", lastSearchesJSON);
 
-    renderSearches()
-
-
+        renderSearches();
+    }
     getSearchResults(text);
 });
 
 function renderSearches() {
     console.log("rendering searches");
-    let searchesCont = document.querySelector(".searchesCont");
-    let searchBar = document.querySelector("#searchfield")
-    searchesCont.innerHTML = '';
+    let searchesCont = document.querySelector(".lastSearches__Cont");
+    let searchBar = document.querySelector("#searchfield");
+    searchesCont.innerHTML = "";
 
-    for (let i = 0; i < 3; i++){
-        if (lastSearches[i].length === 0) {
-            
+    for (let i = 0; i < 3; i++) {
+        console.log(i);
+        if (lastSearches[i] === undefined) {
         } else {
             console.log(lastSearches[i]);
-            let search = document.createElement("p")
-            search.textContent = lastSearches[i]
+            let search = document.createElement("p");
+            search.textContent = lastSearches[i];
 
             search.addEventListener("click", function () {
-                searchBar.value = lastSearches[i]
-                getSearchResults(lastSearches[i])
-            })
-            searchesCont.append(search)
+                searchBar.value = lastSearches[i];
+                getSearchResults(lastSearches[i]);
+            });
+            searchesCont.append(search);
         }
     }
 }
-
 
 function renderResults(results, starting = 0) {
     const searchResults = document.querySelector(".searchResults");
@@ -660,17 +694,20 @@ async function getSearchResults(querry) {
     const closeButton = document.querySelector(".searchButton2");
     const upButton = document.querySelector(".searchButton1");
     const downButton = document.querySelector(".searchButton3");
+    const lastSearches = document.querySelector(".lastSearches");
 
     let pageByFour = 0;
-    let results;
+    let extra = 1;
 
     // if querry emptied, hide dropdown
     if (querry.length === 0) {
+        lastSearches.style.display = "none";
         searchDropDown.style.display = "none";
     } else {
         results = await search(querry);
 
         renderResults(results);
+        lastSearches.style.display = "flex";
         searchDropDown.style.display = "flex";
     }
 
@@ -682,15 +719,32 @@ async function getSearchResults(querry) {
         }
     });
     downButton.addEventListener("click", function () {
-        pageByFour += 4;
-
-        renderResults(results, pageByFour);
+        if (results[pageByFour + 4] === undefined) {
+            console.log("calling more");
+            extra++;
+            handeMore(querry, extra, pageByFour);
+        } else {
+            pageByFour += 4;
+            renderResults(results, pageByFour);
+        }
     });
-
     closeButton.addEventListener("click", function () {
         searchDropDown.style.display = "none";
+        lastSearches.style.display = "none";
         document.querySelector("#searchfield").value = "";
     });
+}
+
+async function handeMore(querry, page, prev) {
+    let more = await search(querry, page);
+    if (more.length === 0) {
+        return;
+    }
+    more.forEach((element) => {
+        results.push(element);
+    });
+    console.log(results);
+    renderResults(results, prev + 4);
 }
 
 //returns an empty search result
@@ -715,7 +769,16 @@ function noResult(position) {
 async function placeSearchMovie(movie, position) {
     const searchResults = document.querySelector(".searchResults");
     let newResult = document.createElement("div");
-    let imgURL = getImg(movie.backdrop_path, "w500");
+    //validate background and assign
+    let img
+
+    if (movie.backdrop_path === null) {
+        img = movie.poster_path
+    } else {
+        img = movie.backdrop_path
+    }
+    
+    let imgURL = getImg(img, "w500");
 
     newResult.classList.add(`result${position}`, "searchResults__Item");
 
@@ -757,7 +820,13 @@ window.onload = async () => {
     await createPage();
     createList(movies);
     getLastSearches();
-    renderSearches();
+    const lastSearches = document.querySelector(".lastSearches");
+    const searchBar = document.querySelector("#searchfield");
+
+    searchBar.addEventListener("focus", function () {
+        renderSearches();
+        lastSearches.style.display = "flex";
+    });
 
     const skeleton = document.querySelector(".loadercont");
     const observer = new IntersectionObserver(async (entries) => {
@@ -778,5 +847,12 @@ window.onload = async () => {
     const searchbar = document.querySelector("#searchfield");
     searchbar.addEventListener("keyup", (e) => {
         debounceSearch(e.target.value);
+    });
+
+    const logout = document.querySelector("#logout");
+    logout.addEventListener("click", function () {
+        sessionStorage.removeItem("auth");
+        localStorage.removeItem("auth");
+        window.location.href = "../Login/index.html";
     });
 };
