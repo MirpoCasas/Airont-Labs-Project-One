@@ -688,6 +688,7 @@ const debounceSearch = debounce((text) => {
     getSearchResults(text);
 });
 
+//renders last Searches
 function renderSearches() {
     console.log("rendering searches");
     let searchesCont = document.querySelector(".lastSearches__Cont");
@@ -711,6 +712,7 @@ function renderSearches() {
     }
 }
 
+//
 function renderResults(results, starting = 0) {
     const searchResults = document.querySelector(".searchResults");
     searchResults.innerHTML = "";
