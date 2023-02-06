@@ -1,10 +1,10 @@
-const authKeyLocal = localStorage.getItem("auth");
-const authKeySession = sessionStorage.getItem("auth");
+//const authKeyLocal = localStorage.getItem("auth");
+//const authKeySession = sessionStorage.getItem("auth");
 
 //check if user is logged, if not return to Login
-if ((authKeyLocal === null) & (authKeySession === null)) {
-    window.location.href = "../Login/index.html";
-}
+//if ((authKeyLocal === null) & (authKeySession === null)) {
+//    window.location.href = "../Login/index.html";
+//}
 
 let lastSearches = [];
 let fetchPage = 1;
